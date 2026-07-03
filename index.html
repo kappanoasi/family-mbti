@@ -1,0 +1,912 @@
+﻿<!doctype html>
+<html lang="ja"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>うちの家族 MBTIマップ</title>
+<style>
+  :root{
+    --paper:#F5F6F3;
+    --card:#FFFFFF;
+    --ink:#272C31;
+    --sub:#616B74;
+    --line:#E2E5E0;
+    --an:#8A63A8; --an-bg:#F3EDF8;
+    --di:#2E9C74; --di-bg:#E9F6F0;
+    --se:#4590AD; --se-bg:#EAF4F8;
+    --ex:#C98F26; --ex-bg:#FBF3E2;
+  }
+  *{box-sizing:border-box}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic UI","Yu Gothic","Noto Sans JP","Meiryo",system-ui,sans-serif;
+    line-height:1.9;
+    margin:0;
+    -webkit-text-size-adjust:100%;
+  }
+  .wrap{max-width:600px;margin:0 auto;padding:28px 18px 72px}
+  .eyebrow{
+    font-size:11px;letter-spacing:.18em;color:var(--sub);
+    font-weight:600;margin:0 0 6px;
+  }
+  h1{
+    font-size:27px;line-height:1.45;margin:0 0 10px;font-weight:700;
+    text-wrap:balance;
+  }
+  .lead{font-size:14.5px;color:var(--sub);margin:0 0 20px}
+  h2{
+    font-size:19px;margin:0 0 4px;font-weight:700;text-wrap:balance;
+  }
+  .sec{margin-top:44px}
+  .sec > .eyebrow{margin-bottom:2px}
+  .secnote{font-size:13px;color:var(--sub);margin:2px 0 14px}
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:18px 16px;
+  }
+
+  /* 凡例 */
+  .legend{display:grid;gap:8px;margin-top:14px}
+  .lg{
+    display:flex;align-items:center;gap:10px;
+    background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:8px 12px;font-size:13px;
+  }
+  .sq{width:12px;height:12px;border-radius:3px;flex:none}
+  .lg b{font-weight:700}
+  .lg .who{margin-left:auto;color:var(--sub);font-size:12.5px;text-align:right}
+
+  /* 入門 */
+  .primer dt{font-size:13px;font-weight:700;margin-top:12px}
+  .primer dt:first-child{margin-top:0}
+  .primer dd{font-size:13px;color:#454E56;margin:1px 0 0}
+  .primer dl{margin:0}
+
+  /* 家族マップ */
+  .mapcard{padding:10px 6px 4px}
+  .mapcard svg{width:100%;height:auto;display:block}
+  .mapnote{font-size:12px;color:var(--sub);text-align:center;margin:2px 0 10px}
+
+  /* 5軸チャート */
+  .axis{margin-bottom:26px}
+  .axis:last-child{margin-bottom:4px}
+  .axttl{font-size:14px;font-weight:700;margin:0 0 2px}
+  .axsub{font-size:12px;color:var(--sub);margin:0 0 10px}
+  .poles{
+    display:flex;justify-content:space-between;
+    font-size:11px;color:var(--sub);font-weight:600;letter-spacing:.08em;
+    padding:0 0 4px 82px;
+  }
+  .arow{
+    display:grid;grid-template-columns:76px 1fr;gap:6px;align-items:center;
+    margin-bottom:7px;
+  }
+  .aname{
+    font-size:12px;font-weight:600;display:flex;align-items:center;gap:5px;
+    white-space:nowrap;
+  }
+  .dot{width:8px;height:8px;border-radius:50%;flex:none}
+  .track{
+    position:relative;height:20px;background:#EDEFEA;border-radius:5px;
+    overflow:hidden;
+  }
+  .track::before{
+    content:"";position:absolute;left:50%;top:0;bottom:0;width:2px;
+    background:#FFFFFF;z-index:2;margin-left:-1px;
+  }
+  .bar{
+    position:absolute;top:3px;bottom:3px;z-index:1;
+  }
+  .bar.toL{right:50%;border-radius:4px 0 0 4px}
+  .bar.toR{left:50%;border-radius:0 4px 4px 0}
+  .bar.zero{left:50%;width:3px;margin-left:-1.5px;border-radius:2px;opacity:.55}
+  .aval{
+    position:absolute;top:0;bottom:0;display:flex;align-items:center;
+    font-size:10.5px;font-weight:700;color:var(--sub);z-index:3;
+    font-variant-numeric:tabular-nums;
+  }
+  .aval.vL{right:calc(50% + 4px)}
+  .aval.vR{left:calc(50% + 4px)}
+  .aval.onL{left:6px}
+  .aval.onR{right:6px}
+
+  /* 発見リスト */
+  .finds{display:grid;gap:10px}
+  .find{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:14px 14px 12px;
+  }
+  .find h3{
+    font-size:14.5px;margin:0 0 4px;font-weight:700;display:flex;gap:8px;
+    align-items:baseline;
+  }
+  .find .mk{
+    flex:none;width:20px;height:20px;border-radius:6px;color:#fff;
+    font-size:11.5px;font-weight:700;display:inline-flex;align-items:center;
+    justify-content:center;transform:translateY(3px);
+  }
+  .find p{font-size:13.5px;margin:0;color:#3A424A}
+
+  /* 家族レコード */
+  .records{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+  .rec{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:12px 13px 11px;
+  }
+  .rec .rl{font-size:10.5px;color:var(--sub);font-weight:600;letter-spacing:.06em;display:block}
+  .rec .rv{font-size:24px;font-weight:700;line-height:1.35;font-variant-numeric:tabular-nums}
+  .rec .rv small{font-size:12px;font-weight:600;color:var(--sub);margin-left:1px}
+  .rec .rh{font-size:12px;font-weight:700;display:flex;gap:5px;align-items:center;margin-top:1px}
+  .rec .rn{font-size:11px;color:var(--sub);margin-top:2px;line-height:1.6;display:block}
+
+  /* 人物カード */
+  details.person{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    margin-bottom:12px;overflow:hidden;
+  }
+  details.person summary{
+    list-style:none;cursor:pointer;padding:14px 14px;
+    display:flex;align-items:center;gap:10px;
+  }
+  details.person summary::-webkit-details-marker{display:none}
+  details.person summary:focus-visible{outline:2px solid var(--ink);outline-offset:-2px;border-radius:14px}
+  .pdot{width:12px;height:12px;border-radius:4px;flex:none}
+  .pmain{min-width:0}
+  .pname{font-size:15.5px;font-weight:700;margin-right:6px}
+  .ptype{font-size:12px;color:var(--sub);font-weight:600;white-space:nowrap}
+  .ptag{
+    display:block;font-size:11.5px;color:var(--sub);margin-top:1px;
+  }
+  .chev{
+    margin-left:auto;flex:none;width:20px;height:20px;color:var(--sub);
+    transition:transform .18s ease;
+  }
+  details.person[open] .chev{transform:rotate(180deg)}
+  @media (prefers-reduced-motion:reduce){.chev{transition:none}}
+  .pbody{padding:2px 16px 18px;border-top:1px solid var(--line)}
+  .chips{
+    display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 4px;
+  }
+  .chip{
+    font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:99px;
+    background:#EFF1EC;color:#4A525A;font-variant-numeric:tabular-nums;
+  }
+  .chip.hl{color:#fff}
+  .pmeta{font-size:11.5px;color:var(--sub);margin:6px 0 0}
+  .fns{margin:14px 0 4px}
+  .fnrow{
+    display:grid;grid-template-columns:74px 1fr 30px;gap:8px;align-items:center;
+    margin-bottom:5px;
+  }
+  .fnlab{font-size:11px;color:var(--sub);font-weight:600;white-space:nowrap}
+  .fnlab b{color:var(--ink);font-weight:700;margin-right:3px}
+  .fnbar{height:10px;background:#EDEFEA;border-radius:3px;overflow:hidden}
+  .fnfill{height:100%;border-radius:3px}
+  .fnnum{font-size:11px;color:var(--sub);font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+  .pbody h4{
+    font-size:13px;margin:20px 0 6px;font-weight:700;letter-spacing:.04em;
+    display:flex;align-items:center;gap:7px;
+  }
+  .pbody h4::before{content:"";width:8px;height:8px;border-radius:2px;background:currentColor;opacity:.85}
+  .pbody p{font-size:13.5px;margin:0 0 10px;color:#343C44}
+  .pbody ul{margin:0;padding-left:19px;font-size:13.5px;color:#343C44}
+  .pbody li{margin-bottom:5px}
+  .pbody li:last-child{margin-bottom:0}
+
+  /* グループ色適用 */
+  .g-an .pdot{background:var(--an)} .g-an .pbody h4{color:var(--an)}
+  .g-di .pdot{background:var(--di)} .g-di .pbody h4{color:var(--di)}
+  .g-se .pdot{background:var(--se)} .g-se .pbody h4{color:var(--se)}
+  .g-ex .pdot{background:var(--ex)} .g-ex .pbody h4{color:var(--ex)}
+  .c-an{background:var(--an)} .c-di{background:var(--di)}
+  .c-se{background:var(--se)} .c-ex{background:var(--ex)}
+
+  /* ペアカード */
+  .pair{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:14px 15px 12px;margin-bottom:12px;
+  }
+  .pair h3{font-size:14.5px;margin:0 0 2px;font-weight:700}
+  .pair .rel{font-size:11.5px;color:var(--sub);font-weight:600;margin:0 0 6px}
+  .pair p{font-size:13.5px;margin:0 0 8px;color:#343C44}
+  .pair p:last-child{margin-bottom:0}
+
+  /* シミュレーション */
+  .scenario{margin-bottom:20px}
+  .scenario:last-child{margin-bottom:0}
+  .scenario h3{font-size:15px;margin:0 0 10px;font-weight:700}
+  .tl{border-left:2px solid var(--line);margin-left:7px;padding-left:16px}
+  .tli{position:relative;margin-bottom:16px}
+  .tli:last-child{margin-bottom:2px}
+  .tli::before{
+    content:"";position:absolute;left:-21px;top:8px;width:8px;height:8px;
+    border-radius:50%;background:var(--sub);
+  }
+  .tlt{font-size:12px;font-weight:700;color:var(--sub);letter-spacing:.06em;margin:0}
+  .tli p{font-size:13.5px;margin:2px 0 0;color:#343C44}
+  .castrow{
+    display:grid;grid-template-columns:72px 1fr;gap:8px;align-items:start;
+    margin-bottom:9px;
+  }
+  .castrow:last-child{margin-bottom:0}
+  .nchip{
+    display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;
+    white-space:nowrap;padding-top:2px;
+  }
+  .castrow p{font-size:13.5px;margin:0;color:#343C44}
+  .simnote{font-size:12px;color:var(--sub);margin:12px 0 0}
+
+  /* 質問コーナー */
+  .qs{display:grid;gap:9px}
+  .q{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:11px 13px;display:grid;grid-template-columns:76px 1fr;gap:8px;
+    align-items:start;
+  }
+  .q p{font-size:13.5px;margin:0;color:#343C44}
+  .q .why{display:block;font-size:11px;color:var(--sub);margin-top:2px}
+
+  /* 注意書き */
+  .notes ul{margin:0;padding-left:19px;font-size:13px;color:#454E56}
+  .notes li{margin-bottom:7px}
+  .notes li:last-child{margin-bottom:0}
+
+  footer{
+    margin-top:48px;padding-top:16px;border-top:1px solid var(--line);
+    font-size:11.5px;color:var(--sub);text-align:center;
+  }
+</style>
+
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">FAMILY PERSONALITY MAP ・ 2026.07</p>
+  <h1>うちの家族 MBTIマップ</h1>
+  <p class="lead">家族7人分の性格タイプを測ってみたら、思った以上に面白い構造が出てきたのでまとめました。スマホでゆっくりどうぞ。気になる人のカードを開くと深掘りが読めます。</p>
+
+  <div class="legend">
+    <div class="lg"><span class="sq c-an"></span><b>分析家</b>グループ<span class="who">次男</span></div>
+    <div class="lg"><span class="sq c-di"></span><b>外交官</b>グループ<span class="who">次男の妻</span></div>
+    <div class="lg"><span class="sq c-se"></span><b>番人</b>グループ<span class="who">長男・長男の妻</span></div>
+    <div class="lg"><span class="sq c-ex"></span><b>探検家</b>グループ<span class="who">長女・父・母</span></div>
+  </div>
+</header>
+
+<!-- ================= 入門 ================= -->
+<section class="sec">
+  <p class="eyebrow">00 ・ PRIMER</p>
+  <h2>先に30秒だけ、MBTIざっくり入門</h2>
+  <p class="secnote">これだけ分かれば下は全部読めます。知ってる人は飛ばしてOK。</p>
+  <div class="card primer">
+    <dl>
+      <dt>タイプの4文字</dt>
+      <dd>①エネルギーの向き(E外向/I内向) ②ものの見方(S現実/N直感) ③判断のしかた(T思考/F感情) ④進め方(J計画/P探索)。頭文字を並べて「INTJ」のように表す。</dd>
+      <dt>5文字目の -A / -T</dt>
+      <dd>心の安定度。A=自己主張型(どっしり・動じない)、T=激動型(感受性が強くストレスに敏感)。良し悪しではなく、アンテナの感度の違い。</dd>
+      <dt>%の読み方</dt>
+      <dd>「内向57%」なら、内向寄りに57%の傾きという意味。50%がちょうど中間で、100%に近いほどその傾向がくっきり強い。</dd>
+      <dt>くっきり度</dt>
+      <dd>「その型らしさ」の濃さ。高いほどタイプの説明がよく当てはまり、低いほど型の枠に収まらない(=ラベルを鵜呑みにしない方がいい)。</dd>
+      <dt>認知機能(8つのバー)</dt>
+      <dd>頭の中の8つの回路の使用量。ビジョンNi・発想Ne・記憶Si・体感Se・分析Ti・実行Te・信念Fi・調和Fe。各メンバーのカードにバーで表示。</dd>
+    </dl>
+  </div>
+</section>
+
+<!-- ================= 家族マップ ================= -->
+<section class="sec">
+  <p class="eyebrow">01 ・ MAP</p>
+  <h2>家族マップ</h2>
+  <p class="secnote">色は性格グループ。二重線は夫婦、枝線は親子。きょうだいは左から生まれ順。</p>
+  <div class="card mapcard">
+    <svg viewBox="0 0 360 252" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="家族の相関図">
+      <!-- 夫婦線: 父母 -->
+      <line x1="158" y1="41" x2="202" y2="41" stroke="#B9BFB8" stroke-width="2"/>
+      <line x1="158" y1="47" x2="202" y2="47" stroke="#B9BFB8" stroke-width="2"/>
+      <!-- 親子線 -->
+      <line x1="180" y1="47" x2="180" y2="74" stroke="#B9BFB8" stroke-width="2"/>
+      <line x1="60" y1="74" x2="300" y2="74" stroke="#B9BFB8" stroke-width="2"/>
+      <line x1="60" y1="74" x2="60" y2="98" stroke="#B9BFB8" stroke-width="2"/>
+      <line x1="180" y1="74" x2="180" y2="98" stroke="#B9BFB8" stroke-width="2"/>
+      <line x1="300" y1="74" x2="300" y2="98" stroke="#B9BFB8" stroke-width="2"/>
+      <!-- 夫婦線: 子世代 -->
+      <line x1="57" y1="144" x2="57" y2="176" stroke="#B9BFB8" stroke-width="2" stroke-dasharray="3 3"/>
+      <line x1="63" y1="144" x2="63" y2="176" stroke="#B9BFB8" stroke-width="2" stroke-dasharray="3 3"/>
+      <line x1="177" y1="144" x2="177" y2="176" stroke="#B9BFB8" stroke-width="2"/>
+      <line x1="183" y1="144" x2="183" y2="176" stroke="#B9BFB8" stroke-width="2"/>
+      <line x1="297" y1="144" x2="297" y2="176" stroke="#B9BFB8" stroke-width="2"/>
+      <line x1="303" y1="144" x2="303" y2="176" stroke="#B9BFB8" stroke-width="2"/>
+
+      <!-- 父 -->
+      <rect x="62" y="21" width="96" height="46" rx="10" fill="#FBF3E2" stroke="#C98F26" stroke-width="1.5"/>
+      <text x="110" y="40" text-anchor="middle" font-size="12.5" font-weight="700" fill="#272C31">父</text>
+      <text x="110" y="56" text-anchor="middle" font-size="10" font-weight="600" fill="#8A6A1F">ISTP-T 巨匠</text>
+      <!-- 母 -->
+      <rect x="202" y="21" width="96" height="46" rx="10" fill="#FBF3E2" stroke="#C98F26" stroke-width="1.5"/>
+      <text x="250" y="40" text-anchor="middle" font-size="12.5" font-weight="700" fill="#272C31">母</text>
+      <text x="250" y="56" text-anchor="middle" font-size="10" font-weight="600" fill="#8A6A1F">ISFP-A 冒険家</text>
+
+      <!-- 長女 -->
+      <rect x="12" y="98" width="96" height="46" rx="10" fill="#FBF3E2" stroke="#C98F26" stroke-width="1.5"/>
+      <text x="60" y="117" text-anchor="middle" font-size="12.5" font-weight="700" fill="#272C31">長女</text>
+      <text x="60" y="133" text-anchor="middle" font-size="10" font-weight="600" fill="#8A6A1F">ISFP-T 冒険家</text>
+      <!-- 長男 -->
+      <rect x="132" y="98" width="96" height="46" rx="10" fill="#EAF4F8" stroke="#4590AD" stroke-width="1.5"/>
+      <text x="180" y="117" text-anchor="middle" font-size="12.5" font-weight="700" fill="#272C31">長男</text>
+      <text x="180" y="133" text-anchor="middle" font-size="10" font-weight="600" fill="#2E6B84">ISFJ-T 擁護者</text>
+      <!-- 次男 -->
+      <rect x="252" y="98" width="96" height="46" rx="10" fill="#F3EDF8" stroke="#8A63A8" stroke-width="1.5"/>
+      <text x="300" y="117" text-anchor="middle" font-size="12.5" font-weight="700" fill="#272C31">次男</text>
+      <text x="300" y="133" text-anchor="middle" font-size="10" font-weight="600" fill="#6E4A8C">INTJ-A 建築家</text>
+
+      <!-- 長女の夫(未計測) -->
+      <rect x="12" y="176" width="96" height="46" rx="10" fill="#F1F2EF" stroke="#AEB4AD" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <text x="60" y="195" text-anchor="middle" font-size="12.5" font-weight="700" fill="#616B74">長女の夫</text>
+      <text x="60" y="211" text-anchor="middle" font-size="10" font-weight="600" fill="#8A929A">未計測</text>
+      <!-- 長男の妻 -->
+      <rect x="132" y="176" width="96" height="46" rx="10" fill="#EAF4F8" stroke="#4590AD" stroke-width="1.5"/>
+      <text x="180" y="195" text-anchor="middle" font-size="12.5" font-weight="700" fill="#272C31">長男の妻</text>
+      <text x="180" y="211" text-anchor="middle" font-size="10" font-weight="600" fill="#2E6B84">ISFJ-A 擁護者</text>
+      <!-- 次男の妻 -->
+      <rect x="252" y="176" width="96" height="46" rx="10" fill="#E9F6F0" stroke="#2E9C74" stroke-width="1.5"/>
+      <text x="300" y="195" text-anchor="middle" font-size="12.5" font-weight="700" fill="#272C31">次男の妻</text>
+      <text x="300" y="211" text-anchor="middle" font-size="10" font-weight="600" fill="#1F7A58">INFJ-T 提唱者</text>
+
+      <text x="180" y="245" text-anchor="middle" font-size="10" fill="#8A929A">7人中7人が内向型。番人×2、探検家×3、分析家と外交官は1人ずつ。</text>
+    </svg>
+  </div>
+</section>
+
+<!-- ================= 5軸くらべ ================= -->
+<section class="sec">
+  <p class="eyebrow">02 ・ AXES</p>
+  <h2>5つの軸で見くらべる</h2>
+  <p class="secnote">バーは中央(50%)からの振れ幅。長いほどその傾向がくっきり、短いほど中間寄り。上から父・母・長女・長男・長男の妻・次男・次男の妻。</p>
+
+  <div class="card">
+
+    <div class="axis">
+      <p class="axttl">こころのエネルギー</p>
+      <p class="axsub">全員が内向型。この家は「沈黙が気まずくない一族」。</p>
+      <div class="poles"><span>← 外向 E</span><span>内向 I →</span></div>
+      <div class="arow"><span class="aname"><span class="dot c-ex"></span>父</span><div class="track"><div class="bar toR c-ex" style="width:20%"></div><span class="aval vR" style="margin-left:20%">70</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-ex"></span>母</span><div class="track"><div class="bar toR c-ex" style="width:29%"></div><span class="aval vR" style="margin-left:29%">79</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-ex"></span>長女</span><div class="track"><div class="bar toR c-ex" style="width:7%"></div><span class="aval vR" style="margin-left:7%">57</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-se"></span>長男</span><div class="track"><div class="bar toR c-se" style="width:28%"></div><span class="aval vR" style="margin-left:28%">78</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-se"></span>長男の妻</span><div class="track"><div class="bar toR c-se" style="width:42%"></div><span class="aval vR" style="margin-left:42%">92</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-an"></span>次男</span><div class="track"><div class="bar toR c-an" style="width:7%"></div><span class="aval vR" style="margin-left:7%">57</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-di"></span>次男の妻</span><div class="track"><div class="bar toR c-di" style="width:15%"></div><span class="aval vR" style="margin-left:15%">65</span></div></div>
+    </div>
+
+    <div class="axis">
+      <p class="axttl">ものの見方</p>
+      <p class="axsub">直感型は次男と次男の妻だけ。次男の96%と長女の94%が正反対に振り切れているのに注目。</p>
+      <div class="poles"><span>← 現実 S</span><span>直感 N →</span></div>
+      <div class="arow"><span class="aname"><span class="dot c-ex"></span>父</span><div class="track"><div class="bar toL c-ex" style="width:13%"></div><span class="aval vL" style="margin-right:13%">63</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-ex"></span>母</span><div class="track"><div class="bar zero c-ex"></div><span class="aval vR" style="margin-left:2%">50</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-ex"></span>長女</span><div class="track"><div class="bar toL c-ex" style="width:44%"></div><span class="aval onL">94</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-se"></span>長男</span><div class="track"><div class="bar toL c-se" style="width:7%"></div><span class="aval vL" style="margin-right:7%">57</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-se"></span>長男の妻</span><div class="track"><div class="bar toL c-se" style="width:17%"></div><span class="aval vL" style="margin-right:17%">67</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-an"></span>次男</span><div class="track"><div class="bar toR c-an" style="width:46%"></div><span class="aval onR">96</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-di"></span>次男の妻</span><div class="track"><div class="bar toR c-di" style="width:11%"></div><span class="aval vR" style="margin-left:11%">61</span></div></div>
+    </div>
+
+    <div class="axis">
+      <p class="axttl">判断のしかた</p>
+      <p class="axsub">思考型は父と次男の2人だけで、しかも同じ75%。あとは全員感情型。</p>
+      <div class="poles"><span>← 思考 T</span><span>感情 F →</span></div>
+      <div class="arow"><span class="aname"><span class="dot c-ex"></span>父</span><div class="track"><div class="bar toL c-ex" style="width:25%"></div><span class="aval vL" style="margin-right:25%">75</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-ex"></span>母</span><div class="track"><div class="bar toR c-ex" style="width:4%"></div><span class="aval vR" style="margin-left:4%">54</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-ex"></span>長女</span><div class="track"><div class="bar toR c-ex" style="width:22%"></div><span class="aval vR" style="margin-left:22%">72</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-se"></span>長男</span><div class="track"><div class="bar toR c-se" style="width:15%"></div><span class="aval vR" style="margin-left:15%">65</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-se"></span>長男の妻</span><div class="track"><div class="bar toR c-se" style="width:13%"></div><span class="aval vR" style="margin-left:13%">63</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-an"></span>次男</span><div class="track"><div class="bar toL c-an" style="width:25%"></div><span class="aval vL" style="margin-right:25%">75</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-di"></span>次男の妻</span><div class="track"><div class="bar toR c-di" style="width:26%"></div><span class="aval vR" style="margin-left:26%">76</span></div></div>
+    </div>
+
+    <div class="axis">
+      <p class="axttl">進め方</p>
+      <p class="axsub">子世代夫婦2組は計画型、親世代+長女は探索型。父の100%は計測上限。</p>
+      <div class="poles"><span>← 計画 J</span><span>探索 P →</span></div>
+      <div class="arow"><span class="aname"><span class="dot c-ex"></span>父</span><div class="track"><div class="bar toR c-ex" style="width:50%"></div><span class="aval onR">100</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-ex"></span>母</span><div class="track"><div class="bar zero c-ex"></div><span class="aval vR" style="margin-left:2%">50</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-ex"></span>長女</span><div class="track"><div class="bar toR c-ex" style="width:39%"></div><span class="aval vR" style="margin-left:39%">89</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-se"></span>長男</span><div class="track"><div class="bar toL c-se" style="width:25%"></div><span class="aval vL" style="margin-right:25%">75</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-se"></span>長男の妻</span><div class="track"><div class="bar toL c-se" style="width:33%"></div><span class="aval vL" style="margin-right:33%">83</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-an"></span>次男</span><div class="track"><div class="bar toL c-an" style="width:3%"></div><span class="aval vL" style="margin-right:3%">53</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-di"></span>次男の妻</span><div class="track"><div class="bar toL c-di" style="width:11%"></div><span class="aval vL" style="margin-right:11%">61</span></div></div>
+    </div>
+
+    <div class="axis">
+      <p class="axttl">アイデンティティ(心の安定)</p>
+      <p class="axsub">自己主張型=どっしり安定、激動型=感受性が強くストレスに敏感。夫婦は3組とも「安定×激動」ペア。</p>
+      <div class="poles"><span>← 自己主張 A</span><span>激動 T →</span></div>
+      <div class="arow"><span class="aname"><span class="dot c-ex"></span>父</span><div class="track"><div class="bar toR c-ex" style="width:4%"></div><span class="aval vR" style="margin-left:4%">54</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-ex"></span>母</span><div class="track"><div class="bar toL c-ex" style="width:21%"></div><span class="aval vL" style="margin-right:21%">71</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-ex"></span>長女</span><div class="track"><div class="bar toR c-ex" style="width:35%"></div><span class="aval vR" style="margin-left:35%">85</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-se"></span>長男</span><div class="track"><div class="bar toR c-se" style="width:26%"></div><span class="aval vR" style="margin-left:26%">76</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-se"></span>長男の妻</span><div class="track"><div class="bar toL c-se" style="width:12%"></div><span class="aval vL" style="margin-right:12%">62</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-an"></span>次男</span><div class="track"><div class="bar toL c-an" style="width:22%"></div><span class="aval vL" style="margin-right:22%">72</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-di"></span>次男の妻</span><div class="track"><div class="bar toR c-di" style="width:18%"></div><span class="aval vR" style="margin-left:18%">68</span></div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= おもしろポイント ================= -->
+<section class="sec">
+  <p class="eyebrow">03 ・ FINDINGS</p>
+  <h2>この家族、ここが面白い</h2>
+  <p class="secnote">7人分を並べて初めて見える構造。</p>
+  <div class="finds">
+    <div class="find"><h3><span class="mk c-se">Ⅰ</span>全員が内向型</h3>
+      <p>7人中7人、内向57〜92%。全員Iの家族は体感でもかなりレア。集まりが静かでも誰も困らない、それぞれのペースで充電する一族。逆に言うと、外から来た外向型の人は最初ちょっと戸惑うかもしれない。</p></div>
+    <div class="find"><h3><span class="mk c-an">Ⅱ</span>「未来と概念の話」ができるのは1組だけ</h3>
+      <p>直感型(N)は次男(96%)と次男の妻(61%)のみで、血縁は全員現実型(S)。特に次男の直感96%は家族内で完全な異分子。もし昔から「話が抽象的」「考えすぎ」と言われてきたなら、原因はこの構造。そして次男の妻は家族で唯一、その話に同じ周波数でついてこられる人。</p></div>
+    <div class="find"><h3><span class="mk c-ex">Ⅲ</span>長女と次男は、頭の使い方がほぼ完全な鏡像</h3>
+      <p>次男は Ni44 / Se2(ビジョン特化・体感ほぼゼロ)、長女は Se69 / Ni1(体感特化・ビジョンほぼゼロ)。同じ家で育って正反対。お互いの得意領域がそのままお互いの盲点になっている。会話が噛み合わない時はだいたいこれが原因(対処法は関係性の章)。</p></div>
+    <div class="find"><h3><span class="mk c-di">Ⅳ</span>夫婦3組、ぜんぶ「安定×激動」ペア</h3>
+      <p>次男A72×次男の妻T68、長男T76×長男の妻A62、父T54×母A71。3組とも片方がどっしりした錨(A)、片方が感受性の強い波(T)。偶然にしては出来すぎな補完構造で、この家の夫婦は「どちらかが必ず動じない」設計になっている。</p></div>
+    <div class="find"><h3><span class="mk c-se">Ⅴ</span>血縁チームはマイペース族。例外は長男</h3>
+      <p>「場の調和(Fe)」のスコアが次男11・長女7・父0・母21と血縁は軒並み低い中、長男だけ37。長男は血縁組で唯一の調和担当=家族の連絡係・潤滑油をやっている可能性が高い。さらに配偶者2人(次男の妻37・長男の妻38)も高Feで、この家は「マイペース一族に、調和型が外から合流してくる」構造になっている。</p></div>
+    <div class="find"><h3><span class="mk c-ex">Ⅵ</span>父の探索型100%は理論値MAX</h3>
+      <p>計画性という概念が計測不能レベル。すべてその場で判断・その場で対応。そしてその気質を一番濃く継いだのが長女(探索89%)。この2人は家族の「今を生きる同盟」で、行動パターンが一番似ている親子のはず。</p></div>
+    <div class="find"><h3><span class="mk c-ex">Ⅶ</span>母はステルス型(型が測定不能)</h3>
+      <p>くっきり度17は家族最低、しかも8種類の認知機能が全部18〜25の団子状態。どの機能も突出していない=どの型にも化けられる。「ISFP」というラベルより「柔軟すぎて測れない」が実像に近い。詳しくは母のカードで。</p></div>
+  </div>
+</section>
+
+<!-- ================= 家族レコード ================= -->
+<section class="sec">
+  <p class="eyebrow">04 ・ RECORDS</p>
+  <h2>家族レコード</h2>
+  <p class="secnote">今回の計測で生まれた各種タイトル。更新者募集中。</p>
+  <div class="records">
+    <div class="rec"><span class="rl">内向の最高峰</span><span class="rv">92<small>%</small></span><span class="rh"><span class="dot c-se"></span>長男の妻</span><span class="rn">一般に見てもレア級の数値</span></div>
+    <div class="rec"><span class="rl">ぶっちぎりの直感</span><span class="rv">96<small>%</small></span><span class="rh"><span class="dot c-an"></span>次男</span><span class="rn">家族唯一のN側振り切り</span></div>
+    <div class="rec"><span class="rl">現実への密着度</span><span class="rv">94<small>%</small></span><span class="rh"><span class="dot c-ex"></span>長女</span><span class="rn">「今ここ」専門</span></div>
+    <div class="rec"><span class="rl">無計画の頂点</span><span class="rv">100<small>%</small></span><span class="rh"><span class="dot c-ex"></span>父</span><span class="rn">探索型、まさかの理論値</span></div>
+    <div class="rec"><span class="rl">感受性MAX</span><span class="rv">85<small>%</small></span><span class="rh"><span class="dot c-ex"></span>長女</span><span class="rn">激動型スコア家族一位</span></div>
+    <div class="rec"><span class="rl">動じないツートップ</span><span class="rv">72<small>/71%</small></span><span class="rh"><span class="dot c-an"></span>次男 &amp; <span class="dot c-ex"></span>母</span><span class="rn">自己主張型の僅差ワンツー</span></div>
+    <div class="rec"><span class="rl">ステルス王</span><span class="rv">17</span><span class="rh"><span class="dot c-ex"></span>母</span><span class="rn">くっきり度最低=型が測定不能</span></div>
+    <div class="rec"><span class="rl">縁の下の調和(Fe)</span><span class="rv">38</span><span class="rh"><span class="dot c-se"></span>長男の妻</span><span class="rn">長男37・次男の妻37が猛追</span></div>
+    <div class="rec"><span class="rl">記憶の番人(Si)</span><span class="rv">54</span><span class="rh"><span class="dot c-se"></span>長男の妻</span><span class="rn">段取りと記録の絶対王者</span></div>
+    <div class="rec"><span class="rl">分析の鬼(Ti)</span><span class="rv">68</span><span class="rh"><span class="dot c-ex"></span>父</span><span class="rn">仕組みの分解なら家族一</span></div>
+  </div>
+</section>
+
+<!-- ================= ひとりずつ深掘り ================= -->
+<section class="sec">
+  <p class="eyebrow">05 ・ MEMBERS</p>
+  <h2>ひとりずつ深掘り</h2>
+  <p class="secnote">タップで開閉。バーは頭の中の「よく使う回路」の強さ(認知機能)。</p>
+
+  <!-- 父 -->
+  <details class="person g-ex">
+    <summary>
+      <span class="pdot"></span>
+      <div class="pmain">
+        <span class="pname">父</span><span class="ptype">ISTP-T 巨匠</span>
+        <span class="ptag">無計画の達人 — 探索型100%、現場対応の鬼</span>
+      </div>
+      <svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </summary>
+    <div class="pbody">
+      <div class="chips">
+        <span class="chip">内向 70</span><span class="chip">現実 63</span><span class="chip">思考 75</span><span class="chip hl c-ex">探索 100</span><span class="chip">激動 54</span>
+      </div>
+      <p class="pmeta">くっきり度 54(ほどほど)・20問計測</p>
+      <div class="fns">
+        <div class="fnrow"><span class="fnlab"><b>Ti</b>分析</span><div class="fnbar"><div class="fnfill c-ex" style="width:97%"></div></div><span class="fnnum">68</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Se</b>体感</span><div class="fnbar"><div class="fnfill c-ex" style="width:71%"></div></div><span class="fnnum">50</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Ne</b>発想</span><div class="fnbar"><div class="fnfill c-ex" style="width:41%"></div></div><span class="fnnum">29</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Fi</b>信念</span><div class="fnbar"><div class="fnfill c-ex" style="width:33%"></div></div><span class="fnnum">23</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Ni</b>ビジョン</span><div class="fnbar"><div class="fnfill c-ex" style="width:0%"></div></div><span class="fnnum">0</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Si</b>記憶</span><div class="fnbar"><div class="fnfill c-ex" style="width:0%"></div></div><span class="fnnum">0</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Te</b>実行</span><div class="fnbar"><div class="fnfill c-ex" style="width:0%"></div></div><span class="fnnum">0</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Fe</b>調和</span><div class="fnbar"><div class="fnfill c-ex" style="width:0%"></div></div><span class="fnnum">0</span></div>
+      </div>
+      <h4>深掘り</h4>
+      <p>まず探索型100%。計測上限。計画という概念が存在せず、すべてその場で判断・その場で対応。旅行のしおりとは無縁の人生を送ってきたはず。</p>
+      <p>認知機能はTi68がダントツ。「仕組み」の人で、物がどう動くか・何が原因かを頭の中で分解する。手を動かして直す・調整する系が得意で、逆に理屈の通らない指示や「決まりだから」が一番嫌いなタイプ。</p>
+      <p>ここで「内向70%」問題。実際の父は場の中心にいて話題を作る——一見矛盾だが、Se50を踏まえると矛盾しない。父の社交性は「人と繋がりたい」駆動ではなく「その場の出来事に反応する」駆動。テストの設問(社交の場が好き?等)にはNOと答えるから内向判定になるけれど、実際の場では起きたことに即反応して、結果的に話の中心になる。「話を振るというより、その場の出来事に反応してそれが話題になる」という家族の観察は、Se優勢型の教科書的な記述そのもの。実際の振る舞いはESTP(起業家)寄りの顔も持っていると見ていい。</p>
+      <p>Fe0・Te0・Si0・Ni0という並びは、20問計測ゆえ極端に振れている面はある。ただ「調和のための社交」「他人を管理する」「前例を踏襲する」「長期の構想を練る」への関心の薄さは、たぶん実像からそう遠くない。激動54%はほぼ中間で、動じるかどうかもその場次第。</p>
+      <h4>ストレスが限界のときのサイン</h4>
+      <p>ISTPの理論上の弱点は「感情の回路(Fe)」。普段クールな人の感情が、限界を超えると急に爆発するパターンが典型とされる。めったに出ないぶん、出たら本物のサイン。そうなる前に一人で手を動かす時間があると回復が早いタイプ。</p>
+      <h4>この人の取扱説明書</h4>
+      <ul>
+        <li>長い説明より実物。話すより一緒に手を動かす</li>
+        <li>段取りで縛らない。ゴールだけ共有して、手順は任せる</li>
+        <li>理屈さえ通っていれば納得は早い</li>
+      </ul>
+    </div>
+  </details>
+
+  <!-- 母 -->
+  <details class="person g-ex">
+    <summary>
+      <span class="pdot"></span>
+      <div class="pmain">
+        <span class="pname">母</span><span class="ptype">ISFP-A 冒険家…と出たけれど</span>
+        <span class="ptag">ステルス型 — 型に収まらない柔軟人</span>
+      </div>
+      <svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </summary>
+    <div class="pbody">
+      <div class="chips">
+        <span class="chip hl c-ex">内向 79</span><span class="chip">現実 50</span><span class="chip">感情 54</span><span class="chip">探索 50</span><span class="chip hl c-ex">自己主張 71</span>
+      </div>
+      <p class="pmeta">くっきり度 17(家族最低 = ほぼ「無色」)・20問計測</p>
+      <div class="fns">
+        <div class="fnrow"><span class="fnlab"><b>Fi</b>信念</span><div class="fnbar"><div class="fnfill c-ex" style="width:36%"></div></div><span class="fnnum">25</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Ni</b>ビジョン</span><div class="fnbar"><div class="fnfill c-ex" style="width:33%"></div></div><span class="fnnum">23</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Si</b>記憶</span><div class="fnbar"><div class="fnfill c-ex" style="width:33%"></div></div><span class="fnnum">23</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Ti</b>分析</span><div class="fnbar"><div class="fnfill c-ex" style="width:31%"></div></div><span class="fnnum">22</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Fe</b>調和</span><div class="fnbar"><div class="fnfill c-ex" style="width:30%"></div></div><span class="fnnum">21</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Ne</b>発想</span><div class="fnbar"><div class="fnfill c-ex" style="width:27%"></div></div><span class="fnnum">19</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Se</b>体感</span><div class="fnbar"><div class="fnfill c-ex" style="width:27%"></div></div><span class="fnnum">19</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Te</b>実行</span><div class="fnbar"><div class="fnfill c-ex" style="width:26%"></div></div><span class="fnnum">18</span></div>
+      </div>
+      <h4>深掘り</h4>
+      <p>結論から言うと、母は「ISFP」というラベルより数字の並びの方がずっと面白い。くっきり度17は家族最低で、しかも上のバーを見ての通り、8種類の認知機能がすべて18〜25の団子状態。どの機能も突出していない=型がほぼ「無色」。現実型50%・探索型50%は文字通りコイン投げで、60問で測り直したら別の型が出る可能性が十分ある。</p>
+      <p>ただし、確実に言えることが2つある。内向79%(しっかり内向)と、自己主張型71%(動じない・安定)。静かで、マイペースで、めったに動揺しない。</p>
+      <p>この「全機能フラット+安定」の組み合わせを解釈するなら、状況対応の柔軟さ。理屈の人(父)にも、感覚の人(長女)にも、心配性の人(長男)にも、それぞれのモードで付き合える。特定の型に固定されていないからこそ、家族の誰とでも噛み合う「中和剤」ポジション。</p>
+      <p>見方を変えると、探索型100%の父と長くやれている理由もここにありそう。型のくっきりした人なら父の無計画に振り回されるところを、母は「まあいいんじゃない」で流せる(A71)。……あるいは単に、20問のテストに「どちらでもない」寄りの回答が多かっただけかもしれない。60問での再計測、個人的には家族で一番見てみたい。</p>
+      <h4>ストレスが限界のときのサイン</h4>
+      <p>型が無色なので理論の当てはめが一番難しい人。ただA71+内向79%から言えるのは、ストレス対処も「静かに一人で消化する」型だろうということ。つまり外からサインが見えにくい。「大丈夫そうに見える」を根拠にしないで、たまに直接聞いてみるのが正解。</p>
+      <h4>この人の取扱説明書</h4>
+      <ul>
+        <li>型で決めつけない(本人がラベル無効化スキル持ち)</li>
+        <li>静かにしているのは不満ではなく充電</li>
+        <li>60問での再計測をお願いする価値、家族No.1</li>
+      </ul>
+    </div>
+  </details>
+
+  <!-- 長女 -->
+  <details class="person g-ex">
+    <summary>
+      <span class="pdot"></span>
+      <div class="pmain">
+        <span class="pname">長女</span><span class="ptype">ISFP-T 冒険家</span>
+        <span class="ptag">今この瞬間を生きる感性派 — 次男と完全ミラー</span>
+      </div>
+      <svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </summary>
+    <div class="pbody">
+      <div class="chips">
+        <span class="chip">内向 57</span><span class="chip hl c-ex">現実 94</span><span class="chip">感情 72</span><span class="chip hl c-ex">探索 89</span><span class="chip hl c-ex">激動 85</span>
+      </div>
+      <p class="pmeta">くっきり度 56(ほどほど)・20問計測</p>
+      <div class="fns">
+        <div class="fnrow"><span class="fnlab"><b>Se</b>体感</span><div class="fnbar"><div class="fnfill c-ex" style="width:99%"></div></div><span class="fnnum">69</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Fi</b>信念</span><div class="fnbar"><div class="fnfill c-ex" style="width:80%"></div></div><span class="fnnum">56</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Ti</b>分析</span><div class="fnbar"><div class="fnfill c-ex" style="width:31%"></div></div><span class="fnnum">22</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Si</b>記憶</span><div class="fnbar"><div class="fnfill c-ex" style="width:13%"></div></div><span class="fnnum">9</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Fe</b>調和</span><div class="fnbar"><div class="fnfill c-ex" style="width:10%"></div></div><span class="fnnum">7</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Ne</b>発想</span><div class="fnbar"><div class="fnfill c-ex" style="width:6%"></div></div><span class="fnnum">4</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Te</b>実行</span><div class="fnbar"><div class="fnfill c-ex" style="width:4%"></div></div><span class="fnnum">3</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Ni</b>ビジョン</span><div class="fnbar"><div class="fnfill c-ex" style="width:1%"></div></div><span class="fnnum">1</span></div>
+      </div>
+      <h4>深掘り</h4>
+      <p>現実94%+探索89%+Se69。家族で最も「今この瞬間」を生きる人。五感・体験・その場のノリがすべての起点で、計画は檻に感じる。よく言えば行動力と切り替えの早さ、率直に言えば予定は未定。</p>
+      <p>2番手のFi56がこの人の芯。自分の価値観がはっきりあって、そしてFe7——「空気に合わせる」という処理をほぼしない。長女の優しさは場の調和のためではなく「自分がそうしたいから」発動する。だから気まぐれに見えて、本人の中では一貫している。</p>
+      <p>激動85%は家族の最高値。感受性が強く、気分の波が大きい。ストレスは溜め込むより表に出るタイプ。ただしSi9/Ni1なので、過去の反省会も未来の心配も長続きしない——波は大きいけれど、引くのも早い。切り替えの早さはこの家族随一。隠れた持ち味はTi22(3番手)で、感覚型に見えて物事を自分なりに分解して考える目も持っている。</p>
+      <p>そして最大のトピックは、末っ子・次男との完全ミラー構造。次男は Ni44/Se2、長女は Se69/Ni1。同じ家で育って、頭の使い方が正反対。会話が噛み合わない時は「片方は概念の話、片方は体験の話」をしているから(対処法は関係性の章)。</p>
+      <h4>ストレスが限界のときのサイン</h4>
+      <p>ISFPの理論上の弱点は「実行・管理の回路(Te)」。普段マイペースで温和な人が、急に辛辣になったり、細かく仕切り始めたりしたら限界のサインとされる。回復には「好きなことを好きな順番でやれる時間」が一番効く。</p>
+      <h4>この人の取扱説明書</h4>
+      <ul>
+        <li>理屈や一般論より、具体例と体験談で話す</li>
+        <li>愚痴は解決策を求めていない。「わかる」で正解</li>
+        <li>予定で縛りすぎない。「行けたら行く」を許容する設計にしておく</li>
+      </ul>
+    </div>
+  </details>
+
+  <!-- 長男 -->
+  <details class="person g-se">
+    <summary>
+      <span class="pdot"></span>
+      <div class="pmain">
+        <span class="pname">長男</span><span class="ptype">ISFJ-T 擁護者</span>
+        <span class="ptag">よく喋る内向型 — 家族の記憶係にして潤滑油</span>
+      </div>
+      <svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </summary>
+    <div class="pbody">
+      <div class="chips">
+        <span class="chip hl c-se">内向 78</span><span class="chip">現実 57</span><span class="chip">感情 65</span><span class="chip">計画 75</span><span class="chip">激動 76</span>
+      </div>
+      <p class="pmeta">くっきり度 38(ふんわり型)・60問計測 = 家族内でいちばん精度の高いデータ</p>
+      <div class="fns">
+        <div class="fnrow"><span class="fnlab"><b>Si</b>記憶</span><div class="fnbar"><div class="fnfill c-se" style="width:57%"></div></div><span class="fnnum">40</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Fe</b>調和</span><div class="fnbar"><div class="fnfill c-se" style="width:53%"></div></div><span class="fnnum">37</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Ni</b>ビジョン</span><div class="fnbar"><div class="fnfill c-se" style="width:43%"></div></div><span class="fnnum">30</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Te</b>実行</span><div class="fnbar"><div class="fnfill c-se" style="width:29%"></div></div><span class="fnnum">20</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Fi</b>信念</span><div class="fnbar"><div class="fnfill c-se" style="width:21%"></div></div><span class="fnnum">15</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Se</b>体感</span><div class="fnbar"><div class="fnfill c-se" style="width:16%"></div></div><span class="fnnum">11</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Ne</b>発想</span><div class="fnbar"><div class="fnfill c-se" style="width:11%"></div></div><span class="fnnum">8</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Ti</b>分析</span><div class="fnbar"><div class="fnfill c-se" style="width:11%"></div></div><span class="fnnum">8</span></div>
+      </div>
+      <h4>深掘り</h4>
+      <p>一見矛盾がある——内向78%なのに、実際はよく話す。これはFe37+Si40の組み合わせで綺麗に説明がつく。長男の「話す」は自己主張ではなく共有。蓄積した経験(Si)を、関係を保つため(Fe)に語る行為で、しかも内向型のおしゃべりは「安心できる少人数の相手」の前でだけ全開になる。つまり次男の前でよく喋るのは、次男が安全認定されている証拠。</p>
+      <p>Si40はトップスコア。家族の記憶係で、過去の出来事・段取り・誰が何を言ったかをよく覚えていて、話が経験談ベースになる。恒例行事や決まった段取りを大事にするのもここから来ている。</p>
+      <p>注目は計画75%+激動76%の組み合わせ。きっちり準備したい人が、同時に心配性でもある。「考えすぎて疲れる」が構造的に起きやすく、話すことで不安を整理している側面がかなりありそう。「長男が話して次男が聞く」構図の正体はたぶんこれ(関係性の章参照)。</p>
+      <p>Ni30はISFJとしては高め。過去の参照だけでなく先読み・察しの良さがあり、周囲の変化に気づくのが早いはず。激動76%は家族で2番目の高さで、外からは安定して見えても内側の心配メーターは常に動いている。</p>
+      <h4>ストレスが限界のときのサイン</h4>
+      <p>ISFJの理論上の弱点は「可能性の回路(Ne)」。疲れが溜まると、最悪のシナリオを次々と想像してしまう「心配の連鎖」モードに入るとされる。普段は現実的な人が急に悲観的な仮定の話を始めたら、それは疲れのサイン。話を聞いてもらって整理できると戻ってくる。</p>
+      <h4>この人の取扱説明書</h4>
+      <ul>
+        <li>話は途中で遮らず、オチまで聞く(不安の整理プロセスなので)</li>
+        <li>急な予定変更は最小限に。変わる時は早めに一報</li>
+        <li>「いつも助かってる」系の言葉が一番効く。貢献の承認が燃料</li>
+      </ul>
+    </div>
+  </details>
+
+  <!-- 長男の妻 -->
+  <details class="person g-se">
+    <summary>
+      <span class="pdot"></span>
+      <div class="pmain">
+        <span class="pname">長男の妻</span><span class="ptype">ISFJ-A 擁護者</span>
+        <span class="ptag">静かな安定運用のプロ — 家族最強の内向92%</span>
+      </div>
+      <svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </summary>
+    <div class="pbody">
+      <div class="chips">
+        <span class="chip hl c-se">内向 92</span><span class="chip">現実 67</span><span class="chip">感情 63</span><span class="chip">計画 83</span><span class="chip">自己主張 62</span>
+      </div>
+      <p class="pmeta">くっきり度 53(ほどほど)・20問計測</p>
+      <div class="fns">
+        <div class="fnrow"><span class="fnlab"><b>Si</b>記憶</span><div class="fnbar"><div class="fnfill c-se" style="width:77%"></div></div><span class="fnnum">54</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Fe</b>調和</span><div class="fnbar"><div class="fnfill c-se" style="width:54%"></div></div><span class="fnnum">38</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Ni</b>ビジョン</span><div class="fnbar"><div class="fnfill c-se" style="width:39%"></div></div><span class="fnnum">27</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Te</b>実行</span><div class="fnbar"><div class="fnfill c-se" style="width:31%"></div></div><span class="fnnum">22</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Fi</b>信念</span><div class="fnbar"><div class="fnfill c-se" style="width:14%"></div></div><span class="fnnum">10</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Se</b>体感</span><div class="fnbar"><div class="fnfill c-se" style="width:11%"></div></div><span class="fnnum">8</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Ti</b>分析</span><div class="fnbar"><div class="fnfill c-se" style="width:9%"></div></div><span class="fnnum">6</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Ne</b>発想</span><div class="fnbar"><div class="fnfill c-se" style="width:6%"></div></div><span class="fnnum">4</span></div>
+      </div>
+      <h4>深掘り</h4>
+      <p>内向92%は家族最強——というより一般的に見てもかなりレアな数値。大人数の集まりは、楽しくても確実に消耗する体質。集まりの後に一人の時間が必要なのは「気分」ではなく「仕様」。</p>
+      <p>Si54+計画83%は、家族一の「安定運用」型であることを示している。ルーティン・事前準備・確実な段取りが心地よく、裏を返すとサプライズや急な変更が一番の負荷になる。</p>
+      <p>Fe38は実は家族の最高値。ただし内向92%とセットなので、気配りは言葉より先に「静かな行動」で出る——気づいたら準備されている、というタイプ。派手じゃないぶん見落とされやすいけれど、稼働量は多いはず。周りが先に気づいて言葉にしてあげたいところ。</p>
+      <p>自己主張型62%は、心配性の長男(激動76%)と綺麗な対照。精神的に安定した錨で、長男の考えすぎを静かに受け止める安全基地になっている可能性が高い。もうひとつ、Ne4は全員の全スコアの中でも際立って低い。突飛な仮定の話や抽象論は響きにくく、具体的で現実的な話題が正解。</p>
+      <h4>ストレスが限界のときのサイン</h4>
+      <p>長男と同じISFJなので、理論上の弱点も同じ「可能性の回路(Ne)」——予定の崩壊+疲労が重なると心配が連鎖しやすい。ただしA型なので長男より復元は早いはず。一番効く回復法は、予定のない静かな一人時間。</p>
+      <h4>この人の取扱説明書</h4>
+      <ul>
+        <li>予定は早めに共有、変更は最小限に(計画83%)</li>
+        <li>大人数の場で無理に話を振るより、一対一の場面を作る方が喜ばれる</li>
+        <li>静かな気配りに気づいたら言葉にする。本人からは絶対にアピールしない</li>
+      </ul>
+    </div>
+  </details>
+
+  <!-- 次男 -->
+  <details class="person g-an">
+    <summary>
+      <span class="pdot"></span>
+      <div class="pmain">
+        <span class="pname">次男</span><span class="ptype">INTJ-A 建築家</span>
+        <span class="ptag">未来設計士 — 末っ子にして家族最大の異分子</span>
+      </div>
+      <svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </summary>
+    <div class="pbody">
+      <div class="chips">
+        <span class="chip">内向 57</span><span class="chip hl c-an">直感 96</span><span class="chip">思考 75</span><span class="chip">計画 53</span><span class="chip">自己主張 72</span>
+      </div>
+      <p class="pmeta">くっきり度 41(ほどほど)</p>
+      <div class="fns">
+        <div class="fnrow"><span class="fnlab"><b>Ni</b>ビジョン</span><div class="fnbar"><div class="fnfill c-an" style="width:63%"></div></div><span class="fnnum">44</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Ne</b>発想</span><div class="fnbar"><div class="fnfill c-an" style="width:53%"></div></div><span class="fnnum">37</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Te</b>実行</span><div class="fnbar"><div class="fnfill c-an" style="width:47%"></div></div><span class="fnnum">33</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Ti</b>分析</span><div class="fnbar"><div class="fnfill c-an" style="width:44%"></div></div><span class="fnnum">31</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Fe</b>調和</span><div class="fnbar"><div class="fnfill c-an" style="width:16%"></div></div><span class="fnnum">11</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Fi</b>信念</span><div class="fnbar"><div class="fnfill c-an" style="width:14%"></div></div><span class="fnnum">10</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Si</b>記憶</span><div class="fnbar"><div class="fnfill c-an" style="width:3%"></div></div><span class="fnnum">2</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Se</b>体感</span><div class="fnbar"><div class="fnfill c-an" style="width:3%"></div></div><span class="fnnum">2</span></div>
+      </div>
+      <h4>深掘り</h4>
+      <p>何より目を引くのが直感96%。ほぼ振り切り。頭の中は常に「パターン・仕組み・この先どうなるか」で回っていて、逆に記憶(Si2)と体感(Se2)にはほとんどリソースが割かれていない。極端に言えば、10年後の構想の方が今夜の献立より鮮明なタイプ。</p>
+      <p>認知機能はNi44(ビジョンに収束する力)とNe37(アイデアを広げる力)が両輪。発想を大量に出して、そこから本命を選び抜く、という動きが得意。さらにTe33とTi31がほぼ拮抗していて、「論理的に正しいか」と「実際に回るか」の両面チェックが自動で入る。企画・設計向きの頭のつくり。</p>
+      <p>一方でFe11/Fi10。感情を無視しているわけではなく、「優先処理の対象」になりにくい設計。他人の感情の機微を拾うセンサーが省エネモードなので、悪気ゼロで事実をそのまま言って刺さることがある(次男の妻のカードとセットで読むべきポイント)。</p>
+      <p>意外なのは計画型53%の低さ。INTJだが計画ガチガチではなく「方針は固定、手順は柔軟」。このゆるさが、探索型だらけの家族(父100・長女89)と致命的に衝突しない緩衝材になっている。そして自己主張型72%=動じない・引きずらない。激動型の多いこの家族で、安定した壁打ち相手として機能している。</p>
+      <h4>ストレスが限界のときのサイン</h4>
+      <p>INTJの理論上の弱点は「体感の回路(Se)」。限界が近づくと、普段の計画性と真逆の「感覚の暴走」——暴飲暴食、夜更かしで動画やゲームを延々と、など——に出やすいとされる。これが出たら頭を使いすぎのサイン。</p>
+      <h4>この人の取扱説明書</h4>
+      <ul>
+        <li>世間話より「それってつまりどういう仕組み?」系の話を振ると喜ぶ</li>
+        <li>気持ちを察してもらうのを待つより、「今こう感じてる」と言語化して渡すと正しく処理される</li>
+        <li>黙っているのは不機嫌ではなく通常運転</li>
+      </ul>
+    </div>
+  </details>
+
+  <!-- 次男の妻 -->
+  <details class="person g-di">
+    <summary>
+      <span class="pdot"></span>
+      <div class="pmain">
+        <span class="pname">次男の妻</span><span class="ptype">INFJ-T 提唱者</span>
+        <span class="ptag">静かな気配りセンサー — 家族唯一の外交官</span>
+      </div>
+      <svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </summary>
+    <div class="pbody">
+      <div class="chips">
+        <span class="chip">内向 65</span><span class="chip">直感 61</span><span class="chip hl c-di">感情 76</span><span class="chip">計画 61</span><span class="chip">激動 68</span>
+      </div>
+      <p class="pmeta">くっきり度 32(ふんわり型)</p>
+      <div class="fns">
+        <div class="fnrow"><span class="fnlab"><b>Fe</b>調和</span><div class="fnbar"><div class="fnfill c-di" style="width:53%"></div></div><span class="fnnum">37</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Ni</b>ビジョン</span><div class="fnbar"><div class="fnfill c-di" style="width:47%"></div></div><span class="fnnum">33</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Fi</b>信念</span><div class="fnbar"><div class="fnfill c-di" style="width:39%"></div></div><span class="fnnum">27</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Si</b>記憶</span><div class="fnbar"><div class="fnfill c-di" style="width:30%"></div></div><span class="fnnum">21</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Ne</b>発想</span><div class="fnbar"><div class="fnfill c-di" style="width:27%"></div></div><span class="fnnum">19</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Se</b>体感</span><div class="fnbar"><div class="fnfill c-di" style="width:17%"></div></div><span class="fnnum">12</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Te</b>実行</span><div class="fnbar"><div class="fnfill c-di" style="width:17%"></div></div><span class="fnnum">12</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Ti</b>分析</span><div class="fnbar"><div class="fnfill c-di" style="width:11%"></div></div><span class="fnnum">8</span></div>
+      </div>
+      <h4>深掘り</h4>
+      <p>最も強い軸は感情76%。認知機能のトップはFe37で、場の空気と相手の感情を最優先で読む。「誰かが我慢していないか」を常時バックグラウンドでスキャンしているタイプ。集まりの場では、本人が消耗する代わりに場が丸く収まっている——その働きは目に見えにくい。</p>
+      <p>面白いのはFi27(自分の信念)も高いこと。外向けの調和と、内側の譲れない価値観を両方持っている。普段はにこやかに合わせるけれど、価値観の一線を越えられた時だけ静かに頑固になる。INFJによく言われる「ある日突然、扉が閉まる」の素地はここにある。</p>
+      <p>Ni33は夫と同じ直感型の回路。この家族で唯一、夫の抽象的な話・将来の話に同じ周波数でついてこられる人で、夫婦の会話が成立している核心はここ。そして激動68%——ストレスや自己批判を内側に溜めやすい。Fe型なので「大丈夫?」には場を守るために「大丈夫」と答える。本当の答えは言葉より表情と睡眠に出る。</p>
+      <p>Ti8は全機能中の最下位。正論や論理で詰められるのが一番つらい形式で、欲しいのは解決策の前の共感。くっきり度32のふんわり型なので、日によってINFP寄り(自分の世界に浸る)やISFJ寄り(現実的な世話焼き)の顔も出る。</p>
+      <h4>ストレスが限界のときのサイン</h4>
+      <p>INFJの理論上の弱点も「体感の回路(Se)」。限界が近づくと、食べすぎ・買い物・掃除への没頭など、感覚的な行動への逃避が出やすいとされる。普段まわりを優先する人ほど限界サインが分かりにくいので、周りが先に気づいてあげたいタイプNo.1。</p>
+      <h4>この人の取扱説明書</h4>
+      <ul>
+        <li>「大丈夫」を額面通りに受け取らない。二回聞くか、言葉ではなく行動で返す</li>
+        <li>相談には解決策より先に「それは大変だったね」</li>
+        <li>頑張りは言葉にして返す。Fe型は承認が燃料</li>
+      </ul>
+    </div>
+  </details>
+
+</section>
+
+<!-- ================= 関係性 ================= -->
+<section class="sec">
+  <p class="eyebrow">06 ・ RELATIONS</p>
+  <h2>関係性のはなし</h2>
+  <p class="secnote">タイプの組み合わせから見える、それぞれのペアの力学。</p>
+
+  <div class="pair">
+    <h3>次男 × 次男の妻</h3>
+    <p class="rel">INTJ-A × INFJ-T ・ 夫婦</p>
+    <p>この家族で唯一の「直感型同士」。抽象的な話・将来の話の周波数が合う相手は、家族の中では互いしかいない。役割分担も綺麗で、論理と構造は夫(Te/Ti)、感情と人間関係のセンサーは妻(Fe37 vs 夫の11)。</p>
+    <p>要注意ポイントは2つ。①夫のFe11では、妻の「場を守るために言わない我慢」を検知できない。「大丈夫?」→「大丈夫」を信用しすぎないこと。②思考75%の率直な物言いは、激動68%の妻には想定の3倍刺さることがある。正論の前に一呼吸。</p>
+  </div>
+
+  <div class="pair">
+    <h3>長男 × 長男の妻</h3>
+    <p class="rel">ISFJ-T × ISFJ-A ・ 夫婦</p>
+    <p>まさかの同型夫婦。安定・気配り・段取りという価値観が同じ方向を向いているので、衝突が構造的に起きにくい。さらに長男の心配性(激動76%)を、妻の安定(自己主張型62%)が静かに受け止める「安全基地」構造まで付いている。</p>
+    <p>強いて注意点を挙げるなら、二人ともFe型で波風を立てないため、不満が言語化されずに沈殿しやすいこと。そして二人ともSi-J型で新しいことへの腰が重いこと。小さな新規イベントを定期的に入れると良い夫婦。</p>
+  </div>
+
+  <div class="pair">
+    <h3>父 × 母</h3>
+    <p class="rel">ISTP-T × ISFP-A ・ 夫婦</p>
+    <p>内向×探索同士の「不干渉・共存」型。父の完全無計画(P100)を、動じない母(A71)が「まあいいんじゃない」で流す。お互いの自由を邪魔しない、消耗の少ない組み合わせ。母の全機能フラットな柔軟さが、父の探索型100%の受け皿になっている。</p>
+  </div>
+
+  <div class="pair">
+    <h3>長男 → 次男</h3>
+    <p class="rel">話す ISFJ-T × 聞く INTJ-A ・ 兄弟</p>
+    <p>「長男が話して、次男が聞く」構図は機能的に説明がつく。長男の側:Fe37(共有したい)+Si40(経験談のストックが豊富)+激動76%(話すことで不安を整理したい)。次男の側:自己主張型72%(動じない聞き手)+内向型(遮らない)。</p>
+    <p>つまりこの構図は、長男のストレス処理装置として回っている可能性が高い。聞き役、地味に大きな貢献をしている。</p>
+  </div>
+
+  <div class="pair">
+    <h3>長女 ↔ 次男</h3>
+    <p class="rel">Se69/Ni1 × Ni44/Se2 ・ 完全ミラーの姉弟</p>
+    <p>会話が噛み合わない時の原因はほぼ確実にこれ。片方は概念と可能性の話(Ni)、片方は体験と今の話(Se)をしている。翻訳のコツ:長女に伝える時は具体例と体験ベースで。長女の話は「解決策を求めていない、今の気持ちの共有」として聞くのが正解。</p>
+  </div>
+
+  <div class="pair">
+    <h3>母 ↔ 長女</h3>
+    <p class="rel">ISFP-A × ISFP-T ・ 同型の母娘</p>
+    <p>実は同じ「冒険家」タイプの母娘。ただし中身は対照的で、長女はSe69/Fi56の全開仕様、母は全機能フラットの静音仕様。同じ型でもくっきり度56と17でここまで違うという良いサンプル。長女の気分の波(激動85%)を、母(A71)が「はいはい」と受け流せるのは、型が同じで温度だけ違うから、かもしれない。</p>
+  </div>
+
+  <div class="pair">
+    <h3>父 ↔ 次男</h3>
+    <p class="rel">家族で二人だけの思考型(両方75%)・ 親子</p>
+    <p>感情を挟まず用件で話せる、貴重な相手同士。ただし父はTi-Se(目の前の仕組みをどう直すか)、次男はNi-Te(この先どう進めるか)なので土俵が違う。「今の話」は父、「先の話」は次男、と分担すると噛み合う。</p>
+  </div>
+
+  <div class="pair">
+    <h3>父 ↔ 長女</h3>
+    <p class="rel">Se同盟 ・ 親子</p>
+    <p>「その場に反応して生きる」二人。探索型100%と89%、体感(Se)のスコア1位と2位。家族で一番行動パターンが似ている親子のはず。思いつきで動くところも、切り替えの早さもそっくり。</p>
+  </div>
+</section>
+
+<!-- ================= シミュレーション ================= -->
+<section class="sec">
+  <p class="eyebrow">07 ・ SIMULATION</p>
+  <h2>タイプ別シミュレーション</h2>
+  <p class="secnote">7人のデータから予想する「たぶんこうなる」。当たってるかは家族会議で検証を。</p>
+
+  <div class="card scenario">
+    <h3>その1「家族旅行を計画したら」</h3>
+    <div class="tl">
+      <div class="tli">
+        <p class="tlt">1ヶ月前</p>
+        <p>長男の妻(計画83%)が宿・行程・持ち物リストを静かに完成させる。長男(Si40)が「前にあの道は渋滞したから」と過去データで行程を補正。次男(直感96%)は「そもそもこの旅行のテーマは…」と構想を語り始め、次男の妻(Fe37)が各自の希望をさりげなく聞いて回る。</p>
+      </div>
+      <div class="tli">
+        <p class="tlt">前日</p>
+        <p>長女(探索89%)「あ、明日だっけ?」。父(探索100%)が行程を把握しているかは誰にも分からない。母は「何でもいいよ」と言いながら荷造りだけ終わっている(A71)。</p>
+      </div>
+      <div class="tli">
+        <p class="tlt">当日</p>
+        <p>父が予定にない脇道を発見して吸い込まれ、長女が続く(Se同盟)。長男が時計を見て静かに焦り(激動76%)、長男の妻が予備プランを無言で展開。次男は「これはこれで面白い」と全体を観察し(A72)、次男の妻は疲れている人がいないかスキャン中。母はどの展開でも楽しそう。</p>
+      </div>
+      <div class="tli">
+        <p class="tlt">帰り道</p>
+        <p>長男が「今日楽しかったね」と全体を総括(Fe)。Si勢(長男・長男の妻)は思い出を丁寧に保存。次男はもう次回の構想を練っていて、長女はもう次の遊びの話をしている。父は無言。通常運転。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card scenario">
+    <h3>その2「実家のテレビが壊れたら」</h3>
+    <div class="castrow"><span class="nchip"><span class="dot c-ex"></span>父</span><p>黙って裏板を開けている。説明書は読まない(Ti68)。</p></div>
+    <div class="castrow"><span class="nchip"><span class="dot c-ex"></span>長女</span><p>「叩いたら直るんじゃない?」と実際に叩く(Se69)。</p></div>
+    <div class="castrow"><span class="nchip"><span class="dot c-se"></span>長男</span><p>「あれ買ったの何年前だっけ…保証書…」と記憶を巻き戻し始める(Si40)。</p></div>
+    <div class="castrow"><span class="nchip"><span class="dot c-se"></span>長男の妻</span><p>購入記録と保証期限が5秒で出てくる(Si54+計画83%)。</p></div>
+    <div class="castrow"><span class="nchip"><span class="dot c-an"></span>次男</span><p>症状から故障パターンを推理し始める。ただし触りはしない(Ni44/Se2)。</p></div>
+    <div class="castrow"><span class="nchip"><span class="dot c-di"></span>次男の妻</span><p>「お父さん、感電しない…?」とみんなの心配をしている(Fe37)。</p></div>
+    <div class="castrow"><span class="nchip"><span class="dot c-ex"></span>母</span><p>「たまに映るからいいよ、それで」(直っていない)(A71)。</p></div>
+    <p class="simnote">※あくまでタイプからの予想です。実話に近かったらそれはそれで面白いので教えてください。</p>
+  </div>
+</section>
+
+<!-- ================= 答え合わせ ================= -->
+<section class="sec">
+  <p class="eyebrow">08 ・ CHECK</p>
+  <h2>本人に聞いてみようコーナー</h2>
+  <p class="secnote">この分析、当たってる? それぞれ本人への検証質問を用意しました。集まった時の話のタネにどうぞ。</p>
+  <div class="qs">
+    <div class="q"><span class="nchip"><span class="dot c-ex"></span>父へ</span><p>旅行のしおりを最後まで読んだこと、人生で何回ある?<span class="why">探索型100%の検証</span></p></div>
+    <div class="q"><span class="nchip"><span class="dot c-ex"></span>母へ</span><p>このテスト、「どちらでもない」って何回選んだ?<span class="why">くっきり度17の謎の解明</span></p></div>
+    <div class="q"><span class="nchip"><span class="dot c-ex"></span>長女へ</span><p>来週の予定を聞かれて、即答できる?<span class="why">探索89%の検証</span></p></div>
+    <div class="q"><span class="nchip"><span class="dot c-se"></span>長男へ</span><p>話してるうちに悩みが勝手に整理されてた経験、ある?<span class="why">「話す=不安の整理」説の検証</span></p></div>
+    <div class="q"><span class="nchip"><span class="dot c-se"></span>長男の妻へ</span><p>集まりのあと、一人の充電時間はどれくらい必要?<span class="why">内向92%の検証</span></p></div>
+    <div class="q"><span class="nchip"><span class="dot c-an"></span>次男へ</span><p>おとといの晩ごはん、思い出せる?<span class="why">記憶(Si)スコア2の検証</span></p></div>
+    <div class="q"><span class="nchip"><span class="dot c-di"></span>次男の妻へ</span><p>「大丈夫」って言ったけど大丈夫じゃなかったこと、最近いつ?<span class="why">Fe型の「場を守る大丈夫」の検証</span></p></div>
+  </div>
+</section>
+
+<!-- ================= 注意書き ================= -->
+<section class="sec">
+  <p class="eyebrow">09 ・ NOTES</p>
+  <h2>読み方の注意</h2>
+  <div class="card notes">
+    <ul>
+      <li>これは16Personalities系の簡易診断の結果です。心理学的に人格を確定するものではなく、<b>会話のきっかけ・相互理解のためのエンタメ</b>として楽しむのが正しい使い方。</li>
+      <li>20問計測(父・母・長女・長男の妻)は精度が粗め。0%や100%のような極端な数値は「本当にゼロ」ではなく、設問数が少ないと振り切れやすいだけの可能性があります。<b>長男は60問</b>なので比較的信頼できるデータ。</li>
+      <li><b>くっきり度</b>が低い人(母17・次男の妻32・長男38)は「その型っぽさが薄い」ということ。タイプのラベルより、各軸の%を見る方が実像に近い。</li>
+      <li>「ストレスサイン」の項は、タイプ理論(劣等機能)からの一般論です。当てはまらなくても不良品ではありません。</li>
+      <li>父の内向判定は、設問の解釈による可能性あり(父のカード参照)。実際の場での振る舞いはもっと外向的に見えるはず。</li>
+      <li><b>長女の夫は未計測。</b>参加者募集中です。</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  計測: 2026年7月(実測5名は 2026/7/2)・まとめ: 次男 + AI
+</footer>
+
+</div>
+
+</body></html>

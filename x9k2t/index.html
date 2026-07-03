@@ -1,0 +1,628 @@
+﻿<!doctype html>
+<html lang="ja"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>うちの家族 MBTIマップ|父ESTP補正版</title>
+<style>
+  :root{
+    --paper:#F5F6F3;
+    --card:#FFFFFF;
+    --ink:#272C31;
+    --sub:#616B74;
+    --line:#E2E5E0;
+    --an:#8A63A8; --an-bg:#F3EDF8;
+    --di:#2E9C74; --di-bg:#E9F6F0;
+    --se:#4590AD; --se-bg:#EAF4F8;
+    --ex:#C98F26; --ex-bg:#FBF3E2;
+  }
+  *{box-sizing:border-box}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic UI","Yu Gothic","Noto Sans JP","Meiryo",system-ui,sans-serif;
+    line-height:1.9;
+    margin:0;
+    -webkit-text-size-adjust:100%;
+  }
+  .wrap{max-width:600px;margin:0 auto;padding:28px 18px 72px}
+  .eyebrow{
+    font-size:11px;letter-spacing:.18em;color:var(--sub);
+    font-weight:600;margin:0 0 6px;
+  }
+  h1{
+    font-size:27px;line-height:1.45;margin:0 0 10px;font-weight:700;
+    text-wrap:balance;
+  }
+  .lead{font-size:14.5px;color:var(--sub);margin:0 0 20px}
+  .banner{
+    background:#FBF3E2;border:1px solid #E4CD9A;border-radius:12px;
+    padding:12px 14px;font-size:13px;color:#6B5518;margin:0 0 20px;
+  }
+  .banner b{font-weight:700}
+  h2{
+    font-size:19px;margin:0 0 4px;font-weight:700;text-wrap:balance;
+  }
+  .sec{margin-top:44px}
+  .sec > .eyebrow{margin-bottom:2px}
+  .secnote{font-size:13px;color:var(--sub);margin:2px 0 14px}
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:18px 16px;
+  }
+
+  /* 凡例 */
+  .legend{display:grid;gap:8px;margin-top:14px}
+  .lg{
+    display:flex;align-items:center;gap:10px;
+    background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:8px 12px;font-size:13px;
+  }
+  .sq{width:12px;height:12px;border-radius:3px;flex:none}
+  .lg b{font-weight:700}
+  .lg .who{margin-left:auto;color:var(--sub);font-size:12.5px;text-align:right}
+
+  /* 家族マップ */
+  .mapcard{padding:10px 6px 4px}
+  .mapcard svg{width:100%;height:auto;display:block}
+  .mapnote{font-size:12px;color:var(--sub);text-align:center;margin:2px 0 10px}
+
+  /* 5軸チャート */
+  .axis{margin-bottom:26px}
+  .axis:last-child{margin-bottom:4px}
+  .axttl{font-size:14px;font-weight:700;margin:0 0 2px}
+  .axsub{font-size:12px;color:var(--sub);margin:0 0 10px}
+  .poles{
+    display:flex;justify-content:space-between;
+    font-size:11px;color:var(--sub);font-weight:600;letter-spacing:.08em;
+    padding:0 0 4px 82px;
+  }
+  .arow{
+    display:grid;grid-template-columns:76px 1fr;gap:6px;align-items:center;
+    margin-bottom:7px;
+  }
+  .aname{
+    font-size:12px;font-weight:600;display:flex;align-items:center;gap:5px;
+    white-space:nowrap;
+  }
+  .dot{width:8px;height:8px;border-radius:50%;flex:none}
+  .track{
+    position:relative;height:20px;background:#EDEFEA;border-radius:5px;
+    overflow:hidden;
+  }
+  .track::before{
+    content:"";position:absolute;left:50%;top:0;bottom:0;width:2px;
+    background:#FFFFFF;z-index:2;margin-left:-1px;
+  }
+  .bar{
+    position:absolute;top:3px;bottom:3px;z-index:1;
+  }
+  .bar.toL{right:50%;border-radius:4px 0 0 4px}
+  .bar.toR{left:50%;border-radius:0 4px 4px 0}
+  .bar.zero{left:50%;width:3px;margin-left:-1.5px;border-radius:2px;opacity:.55}
+  .bar.est{opacity:.5}
+  .aval{
+    position:absolute;top:0;bottom:0;display:flex;align-items:center;
+    font-size:10.5px;font-weight:700;color:var(--sub);z-index:3;
+    font-variant-numeric:tabular-nums;
+  }
+  .aval.vL{right:calc(50% + 4px)}
+  .aval.vR{left:calc(50% + 4px)}
+  .aval.onL{left:6px}
+  .aval.onR{right:6px}
+
+  /* 発見リスト */
+  .finds{display:grid;gap:10px}
+  .find{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:14px 14px 12px;
+  }
+  .find h3{
+    font-size:14.5px;margin:0 0 4px;font-weight:700;display:flex;gap:8px;
+    align-items:baseline;
+  }
+  .find .mk{
+    flex:none;width:20px;height:20px;border-radius:6px;color:#fff;
+    font-size:11.5px;font-weight:700;display:inline-flex;align-items:center;
+    justify-content:center;transform:translateY(3px);
+  }
+  .find p{font-size:13.5px;margin:0;color:#3A424A}
+
+  /* 家族レコード */
+  .records{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+  .rec{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:12px 13px 11px;
+  }
+  .rec .rl{font-size:10.5px;color:var(--sub);font-weight:600;letter-spacing:.06em;display:block}
+  .rec .rv{font-size:24px;font-weight:700;line-height:1.35;font-variant-numeric:tabular-nums}
+  .rec .rv small{font-size:12px;font-weight:600;color:var(--sub);margin-left:1px}
+  .rec .rh{font-size:12px;font-weight:700;display:flex;gap:5px;align-items:center;margin-top:1px}
+  .rec .rn{font-size:11px;color:var(--sub);margin-top:2px;line-height:1.6;display:block}
+
+  /* 人物カード */
+  details.person{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    margin-bottom:12px;overflow:hidden;
+  }
+  details.person summary{
+    list-style:none;cursor:pointer;padding:14px 14px;
+    display:flex;align-items:center;gap:10px;
+  }
+  details.person summary::-webkit-details-marker{display:none}
+  details.person summary:focus-visible{outline:2px solid var(--ink);outline-offset:-2px;border-radius:14px}
+  .pdot{width:12px;height:12px;border-radius:4px;flex:none}
+  .pmain{min-width:0}
+  .pname{font-size:15.5px;font-weight:700;margin-right:6px}
+  .ptype{font-size:12px;color:var(--sub);font-weight:600;white-space:nowrap}
+  .ptag{
+    display:block;font-size:11.5px;color:var(--sub);margin-top:1px;
+  }
+  .chev{
+    margin-left:auto;flex:none;width:20px;height:20px;color:var(--sub);
+    transition:transform .18s ease;
+  }
+  details.person[open] .chev{transform:rotate(180deg)}
+  @media (prefers-reduced-motion:reduce){.chev{transition:none}}
+  .pbody{padding:2px 16px 18px;border-top:1px solid var(--line)}
+  .chips{
+    display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 4px;
+  }
+  .chip{
+    font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:99px;
+    background:#EFF1EC;color:#4A525A;font-variant-numeric:tabular-nums;
+  }
+  .chip.hl{color:#fff}
+  .pmeta{font-size:11.5px;color:var(--sub);margin:6px 0 0}
+  .fns{margin:14px 0 4px}
+  .fnrow{
+    display:grid;grid-template-columns:74px 1fr 30px;gap:8px;align-items:center;
+    margin-bottom:5px;
+  }
+  .fnlab{font-size:11px;color:var(--sub);font-weight:600;white-space:nowrap}
+  .fnlab b{color:var(--ink);font-weight:700;margin-right:3px}
+  .fnbar{height:10px;background:#EDEFEA;border-radius:3px;overflow:hidden}
+  .fnfill{height:100%;border-radius:3px}
+  .fnnum{font-size:11px;color:var(--sub);font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+  .pbody h4{
+    font-size:13px;margin:20px 0 6px;font-weight:700;letter-spacing:.04em;
+    display:flex;align-items:center;gap:7px;
+  }
+  .pbody h4::before{content:"";width:8px;height:8px;border-radius:2px;background:currentColor;opacity:.85}
+  .pbody p{font-size:13.5px;margin:0 0 10px;color:#343C44}
+  .pbody ul{margin:0;padding-left:19px;font-size:13.5px;color:#343C44}
+  .pbody li{margin-bottom:5px}
+  .pbody li:last-child{margin-bottom:0}
+
+  /* グループ色適用 */
+  .g-an .pdot{background:var(--an)} .g-an .pbody h4{color:var(--an)}
+  .g-di .pdot{background:var(--di)} .g-di .pbody h4{color:var(--di)}
+  .g-se .pdot{background:var(--se)} .g-se .pbody h4{color:var(--se)}
+  .g-ex .pdot{background:var(--ex)} .g-ex .pbody h4{color:var(--ex)}
+  .c-an{background:var(--an)} .c-di{background:var(--di)}
+  .c-se{background:var(--se)} .c-ex{background:var(--ex)}
+
+  /* ペアカード */
+  .pair{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:14px 15px 12px;margin-bottom:12px;
+  }
+  .pair h3{font-size:14.5px;margin:0 0 2px;font-weight:700}
+  .pair .rel{font-size:11.5px;color:var(--sub);font-weight:600;margin:0 0 6px}
+  .pair p{font-size:13.5px;margin:0 0 8px;color:#343C44}
+  .pair p:last-child{margin-bottom:0}
+
+  /* シミュレーション */
+  .scenario{margin-bottom:20px}
+  .scenario:last-child{margin-bottom:0}
+  .scenario h3{font-size:15px;margin:0 0 10px;font-weight:700}
+  .scenario > p{font-size:13.5px;margin:0 0 10px;color:#343C44}
+  .tl{border-left:2px solid var(--line);margin-left:7px;padding-left:16px}
+  .tli{position:relative;margin-bottom:16px}
+  .tli:last-child{margin-bottom:2px}
+  .tli::before{
+    content:"";position:absolute;left:-21px;top:8px;width:8px;height:8px;
+    border-radius:50%;background:var(--sub);
+  }
+  .tlt{font-size:12px;font-weight:700;color:var(--sub);letter-spacing:.06em;margin:0}
+  .tli p{font-size:13.5px;margin:2px 0 0;color:#343C44}
+  .castrow{
+    display:grid;grid-template-columns:72px 1fr;gap:8px;align-items:start;
+    margin-bottom:9px;
+  }
+  .castrow:last-child{margin-bottom:0}
+  .nchip{
+    display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;
+    white-space:nowrap;padding-top:2px;
+  }
+  .castrow p{font-size:13.5px;margin:0;color:#343C44}
+  .simnote{font-size:12px;color:var(--sub);margin:12px 0 0}
+
+  /* 質問コーナー */
+  .qs{display:grid;gap:9px}
+  .q{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:11px 13px;display:grid;grid-template-columns:76px 1fr;gap:8px;
+    align-items:start;
+  }
+  .q p{font-size:13.5px;margin:0;color:#343C44}
+  .q .why{display:block;font-size:11px;color:var(--sub);margin-top:2px}
+
+  /* 注意書き */
+  .notes ul{margin:0;padding-left:19px;font-size:13px;color:#454E56}
+  .notes li{margin-bottom:7px}
+  .notes li:last-child{margin-bottom:0}
+
+  footer{
+    margin-top:48px;padding-top:16px;border-top:1px solid var(--line);
+    font-size:11.5px;color:var(--sub);text-align:center;
+  }
+</style>
+
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">FAMILY PERSONALITY MAP ・ ESTP EDITION</p>
+  <h1>うちの家族 MBTIマップ<br>父ESTP補正版</h1>
+  <p class="banner"><b>このページは検証用の別バージョン。</b>公開版では父を計測結果通り「ISTP(内向)」として扱ったが、実際の父は「人がいる場では基本喋る」「無言が怖い」タイプ。行動観察を優先して<b>父=ESTP(隠れ外向)</b>として全体を読み直したのがこの版。公開版はそのまま残してある。</p>
+
+  <div class="legend">
+    <div class="lg"><span class="sq c-an"></span><b>分析家</b>グループ<span class="who">次男</span></div>
+    <div class="lg"><span class="sq c-di"></span><b>外交官</b>グループ<span class="who">次男の妻</span></div>
+    <div class="lg"><span class="sq c-se"></span><b>番人</b>グループ<span class="who">長男・長男の妻</span></div>
+    <div class="lg"><span class="sq c-ex"></span><b>探検家</b>グループ<span class="who">長女・父・母</span></div>
+  </div>
+</header>
+
+<!-- ================= 家族マップ ================= -->
+<section class="sec">
+  <p class="eyebrow">01 ・ MAP</p>
+  <h2>家族マップ(補正版)</h2>
+  <p class="secnote">色は性格グループ。二重線は夫婦、枝線は親子。きょうだいは左から生まれ順。</p>
+  <div class="card mapcard">
+    <svg viewBox="0 0 360 252" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="家族の相関図(父ESTP補正版)">
+      <line x1="158" y1="41" x2="202" y2="41" stroke="#B9BFB8" stroke-width="2"/>
+      <line x1="158" y1="47" x2="202" y2="47" stroke="#B9BFB8" stroke-width="2"/>
+      <line x1="180" y1="47" x2="180" y2="74" stroke="#B9BFB8" stroke-width="2"/>
+      <line x1="60" y1="74" x2="300" y2="74" stroke="#B9BFB8" stroke-width="2"/>
+      <line x1="60" y1="74" x2="60" y2="98" stroke="#B9BFB8" stroke-width="2"/>
+      <line x1="180" y1="74" x2="180" y2="98" stroke="#B9BFB8" stroke-width="2"/>
+      <line x1="300" y1="74" x2="300" y2="98" stroke="#B9BFB8" stroke-width="2"/>
+      <line x1="57" y1="144" x2="57" y2="176" stroke="#B9BFB8" stroke-width="2" stroke-dasharray="3 3"/>
+      <line x1="63" y1="144" x2="63" y2="176" stroke="#B9BFB8" stroke-width="2" stroke-dasharray="3 3"/>
+      <line x1="177" y1="144" x2="177" y2="176" stroke="#B9BFB8" stroke-width="2"/>
+      <line x1="183" y1="144" x2="183" y2="176" stroke="#B9BFB8" stroke-width="2"/>
+      <line x1="297" y1="144" x2="297" y2="176" stroke="#B9BFB8" stroke-width="2"/>
+      <line x1="303" y1="144" x2="303" y2="176" stroke="#B9BFB8" stroke-width="2"/>
+
+      <!-- 父 (ESTP補正: 塗りを濃く・枠太で「発信源」感) -->
+      <rect x="62" y="21" width="96" height="46" rx="10" fill="#F7E5BC" stroke="#C98F26" stroke-width="2.5"/>
+      <text x="110" y="40" text-anchor="middle" font-size="12.5" font-weight="700" fill="#272C31">父</text>
+      <text x="110" y="56" text-anchor="middle" font-size="10" font-weight="600" fill="#8A6A1F">ESTP-T 起業家※</text>
+      <!-- 母 -->
+      <rect x="202" y="21" width="96" height="46" rx="10" fill="#FBF3E2" stroke="#C98F26" stroke-width="1.5"/>
+      <text x="250" y="40" text-anchor="middle" font-size="12.5" font-weight="700" fill="#272C31">母</text>
+      <text x="250" y="56" text-anchor="middle" font-size="10" font-weight="600" fill="#8A6A1F">ISFP-A 冒険家</text>
+
+      <!-- 長女 -->
+      <rect x="12" y="98" width="96" height="46" rx="10" fill="#FBF3E2" stroke="#C98F26" stroke-width="1.5"/>
+      <text x="60" y="117" text-anchor="middle" font-size="12.5" font-weight="700" fill="#272C31">長女</text>
+      <text x="60" y="133" text-anchor="middle" font-size="10" font-weight="600" fill="#8A6A1F">ISFP-T 冒険家</text>
+      <!-- 長男 -->
+      <rect x="132" y="98" width="96" height="46" rx="10" fill="#EAF4F8" stroke="#4590AD" stroke-width="1.5"/>
+      <text x="180" y="117" text-anchor="middle" font-size="12.5" font-weight="700" fill="#272C31">長男</text>
+      <text x="180" y="133" text-anchor="middle" font-size="10" font-weight="600" fill="#2E6B84">ISFJ-T 擁護者</text>
+      <!-- 次男 -->
+      <rect x="252" y="98" width="96" height="46" rx="10" fill="#F3EDF8" stroke="#8A63A8" stroke-width="1.5"/>
+      <text x="300" y="117" text-anchor="middle" font-size="12.5" font-weight="700" fill="#272C31">次男</text>
+      <text x="300" y="133" text-anchor="middle" font-size="10" font-weight="600" fill="#6E4A8C">INTJ-A 建築家</text>
+
+      <!-- 長女の夫(未計測) -->
+      <rect x="12" y="176" width="96" height="46" rx="10" fill="#F1F2EF" stroke="#AEB4AD" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <text x="60" y="195" text-anchor="middle" font-size="12.5" font-weight="700" fill="#616B74">長女の夫</text>
+      <text x="60" y="211" text-anchor="middle" font-size="10" font-weight="600" fill="#8A929A">未計測</text>
+      <!-- 長男の妻 -->
+      <rect x="132" y="176" width="96" height="46" rx="10" fill="#EAF4F8" stroke="#4590AD" stroke-width="1.5"/>
+      <text x="180" y="195" text-anchor="middle" font-size="12.5" font-weight="700" fill="#272C31">長男の妻</text>
+      <text x="180" y="211" text-anchor="middle" font-size="10" font-weight="600" fill="#2E6B84">ISFJ-A 擁護者</text>
+      <!-- 次男の妻 -->
+      <rect x="252" y="176" width="96" height="46" rx="10" fill="#E9F6F0" stroke="#2E9C74" stroke-width="1.5"/>
+      <text x="300" y="195" text-anchor="middle" font-size="12.5" font-weight="700" fill="#272C31">次男の妻</text>
+      <text x="300" y="211" text-anchor="middle" font-size="10" font-weight="600" fill="#1F7A58">INFJ-T 提唱者</text>
+
+      <text x="180" y="245" text-anchor="middle" font-size="10" fill="#8A929A">内向型6人+外向型(推定)1人。会話の供給源は父に一極集中している。</text>
+    </svg>
+  </div>
+  <p class="mapnote">※父のE/I軸のみ行動観察による補正。他の軸と認知機能は計測値のまま(詳細は父のカード)。</p>
+</section>
+
+<!-- ================= 5軸くらべ ================= -->
+<section class="sec">
+  <p class="eyebrow">02 ・ AXES</p>
+  <h2>5つの軸で見くらべる</h2>
+  <p class="secnote">バーは中央(50%)からの振れ幅。父のE/I軸のみ「推定」(薄いバー)——計測はI70だったが行動観察から補正。</p>
+
+  <div class="card">
+
+    <div class="axis">
+      <p class="axttl">こころのエネルギー</p>
+      <p class="axsub">補正版の景色: 内向型6人の海に、外向型が1人。この6:1が家族の会話構造の核。</p>
+      <div class="poles"><span>← 外向 E</span><span>内向 I →</span></div>
+      <div class="arow"><span class="aname"><span class="dot c-ex"></span>父</span><div class="track"><div class="bar toL est c-ex" style="width:15%"></div><span class="aval vL" style="margin-right:15%">推定</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-ex"></span>母</span><div class="track"><div class="bar toR c-ex" style="width:29%"></div><span class="aval vR" style="margin-left:29%">79</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-ex"></span>長女</span><div class="track"><div class="bar toR c-ex" style="width:7%"></div><span class="aval vR" style="margin-left:7%">57</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-se"></span>長男</span><div class="track"><div class="bar toR c-se" style="width:28%"></div><span class="aval vR" style="margin-left:28%">78</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-se"></span>長男の妻</span><div class="track"><div class="bar toR c-se" style="width:42%"></div><span class="aval vR" style="margin-left:42%">92</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-an"></span>次男</span><div class="track"><div class="bar toR c-an" style="width:7%"></div><span class="aval vR" style="margin-left:7%">57</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-di"></span>次男の妻</span><div class="track"><div class="bar toR c-di" style="width:15%"></div><span class="aval vR" style="margin-left:15%">65</span></div></div>
+    </div>
+
+    <div class="axis">
+      <p class="axttl">ものの見方</p>
+      <p class="axsub">直感型は次男と次男の妻だけ。次男の96%と長女の94%が正反対に振り切れているのに注目。</p>
+      <div class="poles"><span>← 現実 S</span><span>直感 N →</span></div>
+      <div class="arow"><span class="aname"><span class="dot c-ex"></span>父</span><div class="track"><div class="bar toL c-ex" style="width:13%"></div><span class="aval vL" style="margin-right:13%">63</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-ex"></span>母</span><div class="track"><div class="bar zero c-ex"></div><span class="aval vR" style="margin-left:2%">50</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-ex"></span>長女</span><div class="track"><div class="bar toL c-ex" style="width:44%"></div><span class="aval onL">94</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-se"></span>長男</span><div class="track"><div class="bar toL c-se" style="width:7%"></div><span class="aval vL" style="margin-right:7%">57</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-se"></span>長男の妻</span><div class="track"><div class="bar toL c-se" style="width:17%"></div><span class="aval vL" style="margin-right:17%">67</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-an"></span>次男</span><div class="track"><div class="bar toR c-an" style="width:46%"></div><span class="aval onR">96</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-di"></span>次男の妻</span><div class="track"><div class="bar toR c-di" style="width:11%"></div><span class="aval vR" style="margin-left:11%">61</span></div></div>
+    </div>
+
+    <div class="axis">
+      <p class="axttl">判断のしかた</p>
+      <p class="axsub">思考型は父と次男の2人だけで、しかも同じ75%。あとは全員感情型。</p>
+      <div class="poles"><span>← 思考 T</span><span>感情 F →</span></div>
+      <div class="arow"><span class="aname"><span class="dot c-ex"></span>父</span><div class="track"><div class="bar toL c-ex" style="width:25%"></div><span class="aval vL" style="margin-right:25%">75</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-ex"></span>母</span><div class="track"><div class="bar toR c-ex" style="width:4%"></div><span class="aval vR" style="margin-left:4%">54</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-ex"></span>長女</span><div class="track"><div class="bar toR c-ex" style="width:22%"></div><span class="aval vR" style="margin-left:22%">72</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-se"></span>長男</span><div class="track"><div class="bar toR c-se" style="width:15%"></div><span class="aval vR" style="margin-left:15%">65</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-se"></span>長男の妻</span><div class="track"><div class="bar toR c-se" style="width:13%"></div><span class="aval vR" style="margin-left:13%">63</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-an"></span>次男</span><div class="track"><div class="bar toL c-an" style="width:25%"></div><span class="aval vL" style="margin-right:25%">75</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-di"></span>次男の妻</span><div class="track"><div class="bar toR c-di" style="width:26%"></div><span class="aval vR" style="margin-left:26%">76</span></div></div>
+    </div>
+
+    <div class="axis">
+      <p class="axttl">進め方</p>
+      <p class="axsub">子世代夫婦2組は計画型、親世代+長女は探索型。父の100%は計測上限——ESTPなら尚更自然。</p>
+      <div class="poles"><span>← 計画 J</span><span>探索 P →</span></div>
+      <div class="arow"><span class="aname"><span class="dot c-ex"></span>父</span><div class="track"><div class="bar toR c-ex" style="width:50%"></div><span class="aval onR">100</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-ex"></span>母</span><div class="track"><div class="bar zero c-ex"></div><span class="aval vR" style="margin-left:2%">50</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-ex"></span>長女</span><div class="track"><div class="bar toR c-ex" style="width:39%"></div><span class="aval vR" style="margin-left:39%">89</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-se"></span>長男</span><div class="track"><div class="bar toL c-se" style="width:25%"></div><span class="aval vL" style="margin-right:25%">75</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-se"></span>長男の妻</span><div class="track"><div class="bar toL c-se" style="width:33%"></div><span class="aval vL" style="margin-right:33%">83</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-an"></span>次男</span><div class="track"><div class="bar toL c-an" style="width:3%"></div><span class="aval vL" style="margin-right:3%">53</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-di"></span>次男の妻</span><div class="track"><div class="bar toL c-di" style="width:11%"></div><span class="aval vL" style="margin-right:11%">61</span></div></div>
+    </div>
+
+    <div class="axis">
+      <p class="axttl">アイデンティティ(心の安定)</p>
+      <p class="axsub">自己主張型=どっしり安定、激動型=感受性が強くストレスに敏感。夫婦は3組とも「安定×激動」ペア。</p>
+      <div class="poles"><span>← 自己主張 A</span><span>激動 T →</span></div>
+      <div class="arow"><span class="aname"><span class="dot c-ex"></span>父</span><div class="track"><div class="bar toR c-ex" style="width:4%"></div><span class="aval vR" style="margin-left:4%">54</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-ex"></span>母</span><div class="track"><div class="bar toL c-ex" style="width:21%"></div><span class="aval vL" style="margin-right:21%">71</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-ex"></span>長女</span><div class="track"><div class="bar toR c-ex" style="width:35%"></div><span class="aval vR" style="margin-left:35%">85</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-se"></span>長男</span><div class="track"><div class="bar toR c-se" style="width:26%"></div><span class="aval vR" style="margin-left:26%">76</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-se"></span>長男の妻</span><div class="track"><div class="bar toL c-se" style="width:12%"></div><span class="aval vL" style="margin-right:12%">62</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-an"></span>次男</span><div class="track"><div class="bar toL c-an" style="width:22%"></div><span class="aval vL" style="margin-right:22%">72</span></div></div>
+      <div class="arow"><span class="aname"><span class="dot c-di"></span>次男の妻</span><div class="track"><div class="bar toR c-di" style="width:18%"></div><span class="aval vR" style="margin-left:18%">68</span></div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= おもしろポイント ================= -->
+<section class="sec">
+  <p class="eyebrow">03 ・ FINDINGS</p>
+  <h2>補正版で見えた構造</h2>
+  <p class="secnote">父がEに変わると、家族の見え方がこう変わる。</p>
+  <div class="finds">
+    <div class="find"><h3><span class="mk c-ex">Ⅰ</span>内向型6人+沈黙を埋める外向型1人</h3>
+      <p>公開版の「全員内向型」から書き換え。内向型6人の集まりが静かでも気まずくならない最大の理由は、実は「全員沈黙に強いから」ではなく、<b>父が場の沈黙を一人で埋め続けているから</b>。父にとって沈黙=刺激ゼロ=落ち着かない(Se優勢)。6人の「沈黙OK」と1人の「沈黙NG」が組み合わさって、誰も無理をしていないのに会話が途切れない場が完成している。</p></div>
+    <div class="find"><h3><span class="mk c-se">Ⅱ</span>会話の供給は2系統に分業されている</h3>
+      <p>この家には話し手が2人いるが、エンジンが違う。<b>父=場全体への放送(Se駆動)</b>: その場の出来事に反応して、部屋にいる全員に向けて喋る。<b>長男=個別回線での共有(Fe駆動)</b>: 安心できる相手に、経験談を1対1で語る。放送局と電話回線。残り5人は快適な受信側。この分業が崩れない限り、この家の集まりは回り続ける。</p></div>
+    <div class="find"><h3><span class="mk c-an">Ⅲ</span>「未来と概念の話」ができるのは1組だけ</h3>
+      <p>直感型(N)は次男(96%)と次男の妻(61%)のみで、血縁は全員現実型(S)。次男の直感96%は家族内で完全な異分子。父がEになってもここは変わらない——むしろ「場は賑やかなのに、次男の話したい抽象論だけは誰も拾わない」構造がよりくっきりする。</p></div>
+    <div class="find"><h3><span class="mk c-ex">Ⅳ</span>長女は「父の直系」だとより分かる</h3>
+      <p>長女と次男の完全ミラー(Se69/Ni1 × Ni44/Se2)は変わらず。加えて補正版では、長女のI57%がほぼ中間なことの意味が出てくる。Se優勢・探索型・反応で生きる——<b>父の気質を一番濃く継いだのは長女</b>で、E/Iだけ母寄りに半歩ずれた、と読むと綺麗に収まる。</p></div>
+    <div class="find"><h3><span class="mk c-di">Ⅴ</span>夫婦3組「安定×激動」ペアは不変。ただし父×母の意味が変わる</h3>
+      <p>3組とも片方が錨・片方が波の構造はそのまま。ただ父×母は補正版だと「よく喋る外向の夫×静かで動じない内向の妻」という古典的な組み合わせになり、母の全機能フラット+A71が<b>父の放送を何十年も受信し続けてきた無限の受け皿</b>だったことが分かる。</p></div>
+    <div class="find"><h3><span class="mk c-se">Ⅵ</span>血縁チーム低Fe問題はむしろ深まる</h3>
+      <p>父のFe実測0は補正後も残る。つまり父の「よく喋る」は調和(Fe)のためではなく刺激(Se)のため——<b>喋るけど、空気を読んで喋っているわけではない</b>。血縁組のマイペース気質(次男11・長女7・父0・母21)は不変で、唯一の調和担当が長男という構図もそのまま。「賑やかなのに誰も空気を読んでいない家」に、調和型3人(長男・長男の妻・次男の妻)が合流している。</p></div>
+    <div class="find"><h3><span class="mk c-ex">Ⅶ</span>母のステルス性能の説明がつく</h3>
+      <p>くっきり度17・全機能フラットの母。補正版ではこの「無色」が生存戦略に見えてくる。探索100%で無計画、沈黙が怖くて喋り続ける夫の隣で何十年もやっていくには、<b>特定の型に固定されない柔軟さと、A71の動じなさが最適解</b>だった説。</p></div>
+  </div>
+</section>
+
+<!-- ================= 家族レコード ================= -->
+<section class="sec">
+  <p class="eyebrow">04 ・ RECORDS</p>
+  <h2>家族レコード(補正版)</h2>
+  <p class="secnote">公開版の10タイトルに、補正版限定の2つを追加。</p>
+  <div class="records">
+    <div class="rec"><span class="rl">唯一の外向(補正判定)</span><span class="rv">1<small>/7人</small></span><span class="rh"><span class="dot c-ex"></span>父</span><span class="rn">残り6人の沈黙を一人で埋める</span></div>
+    <div class="rec"><span class="rl">沈黙耐性・最下位</span><span class="rv">3<small>秒</small></span><span class="rh"><span class="dot c-ex"></span>父</span><span class="rn">無言が続くと何か言う(体感値)</span></div>
+    <div class="rec"><span class="rl">内向の最高峰</span><span class="rv">92<small>%</small></span><span class="rh"><span class="dot c-se"></span>長男の妻</span><span class="rn">一般に見てもレア級の数値</span></div>
+    <div class="rec"><span class="rl">ぶっちぎりの直感</span><span class="rv">96<small>%</small></span><span class="rh"><span class="dot c-an"></span>次男</span><span class="rn">家族唯一のN側振り切り</span></div>
+    <div class="rec"><span class="rl">現実への密着度</span><span class="rv">94<small>%</small></span><span class="rh"><span class="dot c-ex"></span>長女</span><span class="rn">「今ここ」専門</span></div>
+    <div class="rec"><span class="rl">無計画の頂点</span><span class="rv">100<small>%</small></span><span class="rh"><span class="dot c-ex"></span>父</span><span class="rn">探索型、まさかの理論値</span></div>
+    <div class="rec"><span class="rl">感受性MAX</span><span class="rv">85<small>%</small></span><span class="rh"><span class="dot c-ex"></span>長女</span><span class="rn">激動型スコア家族一位</span></div>
+    <div class="rec"><span class="rl">動じないツートップ</span><span class="rv">72<small>/71%</small></span><span class="rh"><span class="dot c-an"></span>次男 &amp; <span class="dot c-ex"></span>母</span><span class="rn">自己主張型の僅差ワンツー</span></div>
+    <div class="rec"><span class="rl">ステルス王</span><span class="rv">17</span><span class="rh"><span class="dot c-ex"></span>母</span><span class="rn">くっきり度最低=型が測定不能</span></div>
+    <div class="rec"><span class="rl">縁の下の調和(Fe)</span><span class="rv">38</span><span class="rh"><span class="dot c-se"></span>長男の妻</span><span class="rn">長男37・次男の妻37が猛追</span></div>
+    <div class="rec"><span class="rl">記憶の番人(Si)</span><span class="rv">54</span><span class="rh"><span class="dot c-se"></span>長男の妻</span><span class="rn">段取りと記録の絶対王者</span></div>
+    <div class="rec"><span class="rl">分析の鬼(Ti)</span><span class="rv">68</span><span class="rh"><span class="dot c-ex"></span>父</span><span class="rn">仕組みの分解なら家族一</span></div>
+  </div>
+</section>
+
+<!-- ================= 父の深掘り(全面改訂) ================= -->
+<section class="sec">
+  <p class="eyebrow">05 ・ FATHER, REVISED</p>
+  <h2>父の深掘り・全面改訂版</h2>
+  <p class="secnote">このページの本体。なぜISTPからESTPに補正したか、補正すると何が変わるか。</p>
+
+  <details class="person g-ex" open>
+    <summary>
+      <span class="pdot"></span>
+      <div class="pmain">
+        <span class="pname">父</span><span class="ptype">ESTP-T 起業家(補正)</span>
+        <span class="ptag">場のラジオ — 隠れ外向、無言が怖い人</span>
+      </div>
+      <svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </summary>
+    <div class="pbody">
+      <div class="chips">
+        <span class="chip hl c-ex">外向(推定)</span><span class="chip">現実 63</span><span class="chip">思考 75</span><span class="chip hl c-ex">探索 100</span><span class="chip">激動 54</span>
+      </div>
+      <p class="pmeta">計測はISTP-T(内向70%)・くっきり度54・20問。E/I軸のみ行動観察で補正、他は計測値のまま。</p>
+      <div class="fns">
+        <div class="fnrow"><span class="fnlab"><b>Ti</b>分析</span><div class="fnbar"><div class="fnfill c-ex" style="width:97%"></div></div><span class="fnnum">68</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Se</b>体感</span><div class="fnbar"><div class="fnfill c-ex" style="width:71%"></div></div><span class="fnnum">50</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Ne</b>発想</span><div class="fnbar"><div class="fnfill c-ex" style="width:41%"></div></div><span class="fnnum">29</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Fi</b>信念</span><div class="fnbar"><div class="fnfill c-ex" style="width:33%"></div></div><span class="fnnum">23</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Ni</b>ビジョン</span><div class="fnbar"><div class="fnfill c-ex" style="width:0%"></div></div><span class="fnnum">0</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Si</b>記憶</span><div class="fnbar"><div class="fnfill c-ex" style="width:0%"></div></div><span class="fnnum">0</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Te</b>実行</span><div class="fnbar"><div class="fnfill c-ex" style="width:0%"></div></div><span class="fnnum">0</span></div>
+        <div class="fnrow"><span class="fnlab"><b>Fe</b>調和</span><div class="fnbar"><div class="fnfill c-ex" style="width:0%"></div></div><span class="fnnum">0</span></div>
+      </div>
+      <h4>なぜ補正したか</h4>
+      <p>計測結果はISTP(内向70%)。しかし実際の父は「人がいる場では基本喋る」「話題の中心になる」「無言が怖い」。この矛盾は計測側の問題と判断した。根拠は3つ。</p>
+      <p>①20問テストはE/I判定が実質4問前後で決まり、2〜3問の解釈違いで簡単に70%まで振れる。②E/I設問は「社交イベントが好きか」「初対面と知り合いたいか」型が多く、「知らない人の集まりは嫌いだが、人がいる場では常に喋る」人はIに誤判定されやすい。③決定打は「無言が怖い」。Ti優勢のISTPは沈黙が全く苦にならないタイプで、「無言が怖いISTP」はほぼ形容矛盾。沈黙=刺激ゼロ=落ち着かない、はSe優勢(ESTP)の典型的な感覚。</p>
+      <h4>都合がいいことに、実測データはESTPとも矛盾しない</h4>
+      <p>ISTPの回路順はTi→Se→Ni→Fe、ESTPはSe→Ti→Fe→Ni。<b>同じエンジン(Ti+Se)の搭載順が違うだけの兄弟タイプ</b>で、父の実測はまさにこの2つがダントツ(Ti68/Se50)。20問の精度でこの2つの順序を確定するのは無理があるので、行動観察で決めるのが正解——そして行動はほぼ全部ESTPを指している。</p>
+      <h4>ESTPとして読み直すと全部つながる</h4>
+      <p>場の中心にいるのは「人が好き(Fe)」だからではなく、「その場で起きることに反応して生きている(Se)」から。テレビ、料理、誰かの一言、窓の外——目に入るもの全部が実況対象になる。「話を振る」のではなく「反応がそのまま話題になる」という家族の観察は、Se優勢の教科書的記述そのもの。</p>
+      <p>ESTPの3番手にはFe(調和)が入る。実測0なので強くはないが、型としては「場を盛り上げる・茶化す・笑わせる」エンタメ気質として顔を出す位置。父の喋りが「気配り」ではなく「芸風」に見えるとしたら、それはFeが弱くSeが強いESTPの喋り方そのもの。</p>
+      <p>探索型100%もESTPだとさらに自然。Se優勢+P振り切りは「計画とは今この瞬間の敵」くらいの世界観で、旅行のしおりと無縁の人生も、思いつきで動いて結果オーライも、全部この構成の標準動作。</p>
+      <h4>変わらないもの</h4>
+      <p>Ti68の「仕組みの人」は不変。物がどう動くか・何が原因かを分解する頭、手を動かして直す腕、理屈の通らない指示や「決まりだから」への拒否感——公開版の分析はそのまま有効。変わるのはエネルギーの向きだけ: <b>一人で静かにしていると充電されるどころか、退屈で消耗する人</b>だった、という一点。</p>
+      <h4>ストレスが限界のときのサイン(ESTP版に更新)</h4>
+      <p>ESTPの理論上の弱点は「ビジョンの回路(Ni)」。限界時は普段と真逆の症状——妙に悲観的な予感を口にする、「どうせ悪くなる」と未来を暗く決めつける、そして喋らなくなる。<b>普段が普段なので、父が静かになったら黄色信号ではなく赤信号</b>。ISTP版(感情爆発)より、こちらの方が観察しやすいはず。</p>
+      <h4>取扱説明書(ESTP版に更新)</h4>
+      <ul>
+        <li>聞き役を期待しない。喋らせておくのが平常運転で、それが本人の充電でもある</li>
+        <li>沈黙・退屈・待ち時間が一番の敵。待たせるなら手を動かせる何かを渡す</li>
+        <li>長時間一人にさせない(本人が退屈する)。ただし段取りで縛るのは引き続き厳禁</li>
+        <li>静かになったら本気で心配する</li>
+      </ul>
+    </div>
+  </details>
+</section>
+
+<!-- ================= 関係性(補正版) ================= -->
+<section class="sec">
+  <p class="eyebrow">06 ・ RELATIONS</p>
+  <h2>関係性・補正で変わるところ</h2>
+  <p class="secnote">父が絡むペアだけ読み直し。他のペア(夫婦2組・兄弟・姉弟・母娘)は公開版のまま有効。</p>
+
+  <div class="pair">
+    <h3>父 → 家族全員</h3>
+    <p class="rel">場の会話供給・中央銀行 ・ 補正版の新発見</p>
+    <p>内向型6人の集まりが静かでも気まずくならない最大の理由。父が場全体への会話を供給し(Se・沈黙埋め)、長男が個別回線での会話を供給する(Fe・共有)、という2系統の分業。父が席を立った瞬間だけ部屋が静かになるが、6人は全員それで平気——そして父は静かな部屋に戻ってくると、また何か喋り出す。誰も設計していないのに完成している生態系。</p>
+  </div>
+
+  <div class="pair">
+    <h3>父 × 母</h3>
+    <p class="rel">ESTP-T(補正) × ISFP-A ・ 夫婦</p>
+    <p>補正版では「よく喋る外向の夫×静かで動じない内向の妻」という古典的な構図になる。父の放送を、母のA71と全機能フラットの柔軟さが何十年も受信し続けてきた。父の完全無計画(P100)を「まあいいんじゃない」で流すのも同じ受け皿。不干渉・共存というより、<b>一方が発信し続け、一方が消耗せずに受信し続ける安定放送局</b>と読む方が近いかもしれない。</p>
+  </div>
+
+  <div class="pair">
+    <h3>父 ↔ 長女</h3>
+    <p class="rel">Se同盟・直系 ・ 親子</p>
+    <p>公開版の「行動パターンが一番似ている親子」はそのまま。補正版で加わるのは、長女のI57%がほぼ中間という事実の意味。Se優勢・探索型・反応で生きる気質は父の直系で、E/Iだけ母寄りに半歩ずれた——長女は「父のエンジンに母の静けさを少し混ぜた人」と読むと、家族内での立ち位置が綺麗に説明できる。</p>
+  </div>
+
+  <div class="pair">
+    <h3>父 ↔ 次男</h3>
+    <p class="rel">家族で二人だけの思考型(両方75%) ・ 親子</p>
+    <p>感情を挟まず用件で話せる貴重な相手同士、は不変。補正版で分かるのは会話の非対称性の正体。父はE(発信)×Se(今の話)、次男はI(受信寄り)×Ni(先の話)。つまり<b>父が今の話を発信し、次男が聞きながら先のことを考えている</b>のが自然状態で、これは噛み合っていないのではなく、両者ともそれで快適という珍しい形。</p>
+  </div>
+</section>
+
+<!-- ================= シミュレーション(補正版) ================= -->
+<section class="sec">
+  <p class="eyebrow">07 ・ SIMULATION</p>
+  <h2>シミュレーション・ESTP補正版</h2>
+  <p class="secnote">公開版の2本を父ESTPで書き直し+正月を新規追加。</p>
+
+  <div class="card scenario">
+    <h3>その1「家族旅行を計画したら」(改訂)</h3>
+    <div class="tl">
+      <div class="tli">
+        <p class="tlt">1ヶ月前</p>
+        <p>長男の妻(計画83%)が宿・行程・持ち物リストを静かに完成させる。長男(Si40)が「前にあの道は渋滞したから」と過去データで行程を補正。次男(直感96%)は「そもそもこの旅行のテーマは…」と構想を語り始め、次男の妻(Fe37)が各自の希望をさりげなく聞いて回る。父は計画会議に一切参加していないが、雑談には全部参加している。</p>
+      </div>
+      <div class="tli">
+        <p class="tlt">前日</p>
+        <p>長女(探索89%)「あ、明日だっけ?」。父(探索100%)は行程を1ミリも把握していないが、なぜか誰よりも楽しみにしている気配がある(Se: 新しい刺激の予感)。母は「何でもいいよ」と言いながら荷造りだけ終わっている(A71)。</p>
+      </div>
+      <div class="tli">
+        <p class="tlt">当日</p>
+        <p><b>車内が一番賑やかなのは父</b>。対向車、看板、道端の店、全部が実況対象(Se優勢の教科書)。そして予定にない脇道を発見した瞬間ハンドルを切り、長女が「いいじゃん」と乗る(Se同盟)。長男が時計を見て静かに焦り(激動76%)、長男の妻が予備プランを無言で展開。次男は「これはこれで面白い」と全体を観察し(A72)、次男の妻は疲れている人がいないかスキャン中。母はどの展開でも楽しそう。</p>
+      </div>
+      <div class="tli">
+        <p class="tlt">帰り道</p>
+        <p>長男が「今日楽しかったね」と総括(Fe)。Si勢(長男・長男の妻)は思い出を丁寧に保存。次男はもう次回の構想。長女はもう次の遊びの話。<b>そして帰りの車内でも父の実況は止まらない</b>。全員が寝ても、たぶん止まらない。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card scenario">
+    <h3>その2「実家のテレビが壊れたら」(改訂)</h3>
+    <div class="castrow"><span class="nchip"><span class="dot c-ex"></span>父</span><p><b>実況しながら</b>裏板を開ける。「あーこれはあれだな、前もこうなったんだよな」——手と口が同時に動く(Ti68+Se50+E)。説明書は読まない。</p></div>
+    <div class="castrow"><span class="nchip"><span class="dot c-ex"></span>長女</span><p>「叩いたら直るんじゃない?」と実際に叩く(Se69)。父と長女で機体を挟んで実況合戦になる。</p></div>
+    <div class="castrow"><span class="nchip"><span class="dot c-se"></span>長男</span><p>「あれ買ったの何年前だっけ…保証書…」と記憶を巻き戻し始める(Si40)。</p></div>
+    <div class="castrow"><span class="nchip"><span class="dot c-se"></span>長男の妻</span><p>購入記録と保証期限が5秒で出てくる(Si54+計画83%)。</p></div>
+    <div class="castrow"><span class="nchip"><span class="dot c-an"></span>次男</span><p>症状から故障パターンを推理し始める。ただし触りはしない(Ni44/Se2)。父の実況が推理のノイズになっている。</p></div>
+    <div class="castrow"><span class="nchip"><span class="dot c-di"></span>次男の妻</span><p>「お父さん、感電しない…?」とみんなの心配をしている(Fe37)。</p></div>
+    <div class="castrow"><span class="nchip"><span class="dot c-ex"></span>母</span><p>「たまに映るからいいよ、それで」(直っていない)(A71)。</p></div>
+  </div>
+
+  <div class="card scenario">
+    <h3>その3「正月、実家に全員集合」(新規)</h3>
+    <p>父はこたつの主にして<b>場のラジオ</b>。テレビ、料理、誰かの一言、窓の外——目に入ったもの全部が実況対象になり、沈黙が3秒続くと父が何か言う。内向型6人はそれを快適なBGMとして聞き、たまに反応する。</p>
+    <p>その裏で長男の個別回線が開通しており、次男を相手に経験談を再生している(定位置)。長女は遅れて来て、来た瞬間だけ父と実況がぶつかって一番賑やかになり、食べて、喋って、先に帰る。長男の妻は配膳と片付けのタイミングが完璧で、湯呑みが空くと新しいお茶が音もなく現れる。妻はそれに静かに連携しつつ疲労者スキャン。母はキッチンと居間を往復しながら、全体をゆるく把握して誰にも干渉しない。</p>
+    <p><b>父が席を立った瞬間だけ部屋が静かになる。6人は全員それで平気(ここが内向型6人)。そして父は静かな部屋に戻ってくると、また何か喋り出す。</b>これがこの家の正月の生態系。誰も設計していないのに完成している。</p>
+    <p class="simnote">※あくまでタイプからの予想です。</p>
+  </div>
+</section>
+
+<!-- ================= 検証 ================= -->
+<section class="sec">
+  <p class="eyebrow">08 ・ VERIFY</p>
+  <h2>ESTP説の検証チェックリスト</h2>
+  <p class="secnote">再計測(60問)の前に、観察でほぼ判別できる。予測: 60問ならE判定、ESTP、E60〜75%あたり。</p>
+  <div class="qs">
+    <div class="q"><span class="nchip"><span class="dot c-ex"></span>チェック1</span><p>一人の時間が長く続くとどうなる?<span class="why">平気で没頭し続ける→I / そわそわして外に出る・誰かに話しかける→E</span></p></div>
+    <div class="q"><span class="nchip"><span class="dot c-ex"></span>チェック2</span><p>初対面の相手でも変わらず喋る?<span class="why">慣れた人限定→I / 誰でも→E(観察上は後者)</span></p></div>
+    <div class="q"><span class="nchip"><span class="dot c-ex"></span>チェック3</span><p>聞き役に回っている場面を見たことがあるか?<span class="why">ほぼ無い→Se優勢のE</span></p></div>
+    <div class="q"><span class="nchip"><span class="dot c-ex"></span>チェック4</span><p>疲れている時、人を避けるか・人に混ざるか?<span class="why">避ける→I / むしろ賑やかな場で回復する→E。ここが最終判定</span></p></div>
+  </div>
+</section>
+
+<!-- ================= 注意書き ================= -->
+<section class="sec">
+  <p class="eyebrow">09 ・ NOTES</p>
+  <h2>この版の扱い</h2>
+  <div class="card notes">
+    <ul>
+      <li>この版は<b>次男の個人用・検証用</b>。公開版(GitHub Pages)は書き換えていない。</li>
+      <li>補正したのは<b>父のE/I軸のみ</b>。S63・T75・P100・激動54と認知機能スコアは計測値のまま使用。</li>
+      <li>補正の根拠は行動観察(常に喋る・無言が怖い・場の中心・出来事への即反応)+20問テストのE/I判定が実質4問前後しかないという構造的な粗さ。</li>
+      <li>最終確定には<b>60問での再計測</b>を推奨。その際、E/I設問(「社交の場が好きか」等)は本人が「知らない人の集まり」を想像して答えないよう、意味を補足してあげると精度が上がる。</li>
+      <li>ESTP説が確定したら、公開版の父の項・マップ・レコード・シミュレーションも連動改訂できる(このページがそのまま下書きになる)。</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  計測: 2026年7月・父ESTP補正版(個人用) 2026/7/3・まとめ: 次男 + AI
+</footer>
+
+</div>
+
+</body></html>

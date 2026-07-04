@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>INTJ-A × ENFP-T 相性分析</title>
+<style>
+  :root{
+    --ink:#26243a; --muted:#75727f; --faint:#a5a2b0;
+    --ground:#f7f6f3; --paper:#ffffff; --line:#e5e3de;
+    --nk:#5b4b9e; --nk-deep:#3e3372; --nk-bg:#efecf7; --nk-line:#d8d2ea;
+    --tk:#279b62; --tk-deep:#175f42; --tk-bg:#e8f4ec; --tk-line:#c9e5d3;
+    --mono:ui-monospace,"Cascadia Mono",Consolas,Menlo,monospace;
+  }
+  html{background:var(--ground);}
+  body{margin:0;}
+  .page{
+    font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic UI","Yu Gothic","Noto Sans JP",Meiryo,sans-serif;
+    color:var(--ink); background:var(--ground);
+    line-height:1.9; font-size:15.5px;
+  }
+  .wrap{max-width:720px; margin:0 auto; padding:56px 22px 72px;}
+  .eyebrow{font-size:12px; letter-spacing:.22em; color:var(--faint); font-weight:700; margin:0 0 6px;}
+  h1{font-size:26px; font-weight:900; margin:0 0 4px; letter-spacing:.02em; text-wrap:balance;}
+  .lede{color:var(--muted); font-size:13.5px; margin:0 0 36px;}
+  h2{font-size:19px; font-weight:900; margin:0 0 16px; letter-spacing:.03em;}
+  section{margin-top:56px;}
+  .sec-label{font-size:11.5px; letter-spacing:.24em; color:var(--faint); font-weight:700; margin:0 0 8px;}
+  p{margin:0 0 14px;}
+  .num{font-family:var(--mono); font-variant-numeric:tabular-nums;}
+
+  .versus{display:grid; grid-template-columns:1fr auto 1fr; gap:14px; align-items:stretch; margin:0 0 20px;}
+  .pcard{background:var(--paper); border-radius:14px; padding:20px 20px 16px; border-top:4px solid;}
+  .pcard.nk{border-top-color:var(--nk);}
+  .pcard.tk{border-top-color:var(--tk);}
+  .pcard .who{font-size:13px; font-weight:700; color:var(--muted); margin:0;}
+  .pcard .code{font-family:var(--mono); font-size:30px; font-weight:700; margin:2px 0 0; letter-spacing:.01em;}
+  .pcard.nk .code{color:var(--nk-deep);}
+  .pcard.tk .code{color:var(--tk-deep);}
+  .pcard .role{font-size:12.5px; color:var(--muted); margin:0 0 10px;}
+  .pcard .kuk{font-size:12px; color:var(--muted); border-top:1px solid var(--line); padding-top:10px; margin:0;}
+  .vs{align-self:center; font-family:var(--mono); font-size:15px; color:var(--faint); font-weight:700;}
+  @media (max-width:540px){
+    .versus{grid-template-columns:1fr;}
+    .vs{display:none;}
+  }
+
+  .chart{background:var(--paper); border-radius:14px; padding:22px 24px 14px; margin:0;}
+  .legend{display:flex; flex-wrap:wrap; gap:8px 18px; font-size:12px; color:var(--muted); margin:0 0 18px;}
+  .legend span{display:flex; align-items:center; gap:6px;}
+  .dotkey{width:11px; height:11px; border-radius:50%; display:inline-block; flex:none;}
+  .axis{margin-bottom:14px;}
+  .poles{display:flex; justify-content:space-between; font-size:12px; color:var(--muted); font-weight:700; margin-bottom:0;}
+  .track{position:relative; height:48px;}
+  .rail{position:absolute; top:22px; left:0; right:0; height:4px; border-radius:2px; background:var(--ground);}
+  .mid{position:absolute; top:16px; left:50%; width:1px; height:16px; background:var(--line);}
+  .dot{position:absolute; top:18px; width:13px; height:13px; border-radius:50%; transform:translateX(-50%); box-shadow:0 0 0 2.5px var(--paper);}
+  .dot.nk{background:var(--nk);}
+  .dot.tk{background:var(--tk);}
+  .val{position:absolute; font-family:var(--mono); font-size:11px; transform:translateX(-50%); white-space:nowrap;}
+  .val.nk{top:1px; color:var(--nk);}
+  .val.tk{top:34px; color:var(--tk);}
+  .chart-note{font-size:11.5px; color:var(--faint); margin:6px 0 0; line-height:1.7;}
+
+  ul.plain{padding-left:0; list-style:none; margin:0;}
+  ul.plain li{margin:0 0 16px; padding-left:18px; position:relative;}
+  ul.plain li::before{content:""; position:absolute; left:0; top:.85em; width:7px; height:7px; border-radius:2px; background:var(--line);}
+  .li-t{font-weight:700;}
+
+  ol.risk{padding-left:0; list-style:none; margin:0; counter-reset:risk;}
+  ol.risk li{counter-increment:risk; margin:0 0 18px; padding-left:40px; position:relative;}
+  ol.risk li::before{
+    content:counter(risk); position:absolute; left:0; top:.2em;
+    font-family:var(--mono); font-size:15px; font-weight:700; color:var(--ink);
+    width:26px; height:26px; border-radius:50%; background:var(--paper);
+    display:flex; align-items:center; justify-content:center;
+  }
+
+  .manuals{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  @media (max-width:600px){ .manuals{grid-template-columns:1fr;} }
+  .manual{border-radius:14px; padding:20px 20px 8px;}
+  .manual.nk{background:var(--nk-bg);}
+  .manual.tk{background:var(--tk-bg);}
+  .manual h3{font-size:15px; font-weight:900; margin:0 0 2px;}
+  .manual.nk h3{color:var(--nk-deep);}
+  .manual.tk h3{color:var(--tk-deep);}
+  .manual .for{font-size:11.5px; margin:0 0 12px; font-weight:700;}
+  .manual.nk .for{color:var(--nk);}
+  .manual.tk .for{color:var(--tk);}
+  .manual ul{padding-left:0; list-style:none; margin:0; font-size:14px; line-height:1.85;}
+  .manual li{margin:0 0 12px; padding-left:16px; position:relative;}
+  .manual.nk li::before{content:""; position:absolute; left:0; top:.8em; width:6px; height:6px; border-radius:50%; background:var(--nk);}
+  .manual.tk li::before{content:""; position:absolute; left:0; top:.8em; width:6px; height:6px; border-radius:50%; background:var(--tk);}
+
+  .shared{background:var(--paper); border-radius:14px; padding:20px 22px 8px; margin-top:14px;}
+  .shared h3{font-size:15px; font-weight:900; margin:0 0 12px;}
+
+  .close{background:var(--ink); color:#f3f2ee; border-radius:14px; padding:26px 26px; margin-top:56px;}
+  .close p{margin:0; font-size:15.5px; line-height:2;}
+  .close .big{font-size:19px; font-weight:900; margin-bottom:8px; letter-spacing:.03em;}
+  .foot{margin-top:28px; font-size:11.5px; color:var(--faint); line-height:1.8;}
+</style>
+</head>
+<body>
+
+<div class="page"><div class="wrap">
+
+  <p class="eyebrow">MBTI COMPATIBILITY REPORT</p>
+  <h1>INTJ-A × ENFP-T 相性分析</h1>
+  <p class="lede">中田 × たけうち君 ── %の強弱まで含めた深掘り。数値は16Personalities実測。</p>
+
+  <div class="versus">
+    <div class="pcard nk">
+      <p class="who">中田</p>
+      <p class="code">INTJ-A</p>
+      <p class="role">建築家 / 自己主張型</p>
+      <p class="kuk">くっきり度 <span class="num">41</span> ── 直感<span class="num">96</span>と思考<span class="num">75</span>が突出した、輪郭のはっきりした型</p>
+    </div>
+    <div class="vs">×</div>
+    <div class="pcard tk">
+      <p class="who">たけうち君</p>
+      <p class="code">ENFP-T</p>
+      <p class="role">運動家 / 激動型</p>
+      <p class="kuk">くっきり度 <span class="num">17</span> ── 4軸すべて中央寄りの、型の薄い柔軟なタイプ<br><span style="color:var(--faint)">※測定は20問の簡易版（精度は粗め）</span></p>
+    </div>
+  </div>
+
+  <div class="chart">
+    <div class="legend">
+      <span><span class="dotkey" style="background:var(--nk)"></span>中田（上ラベル）</span>
+      <span><span class="dotkey" style="background:var(--tk)"></span>たけうち君（下ラベル）</span>
+      <span style="color:var(--faint)">中央の縦線 = 50%（どちらでもない）</span>
+    </div>
+    <div class="axis">
+      <div class="poles"><span>内向</span><span>外向</span></div>
+      <div class="track">
+        <div class="rail"></div><div class="mid"></div>
+        <span class="val nk" style="left:43%">内向57</span>
+        <div class="dot nk" style="left:43%"></div>
+        <div class="dot tk" style="left:67%"></div>
+        <span class="val tk" style="left:67%">外向67</span>
+      </div>
+    </div>
+    <div class="axis">
+      <div class="poles"><span>現実</span><span>直感</span></div>
+      <div class="track">
+        <div class="rail"></div><div class="mid"></div>
+        <span class="val nk" style="left:96%; transform:translateX(-82%)">直感96</span>
+        <div class="dot nk" style="left:96%"></div>
+        <div class="dot tk" style="left:56%"></div>
+        <span class="val tk" style="left:56%">直感56</span>
+      </div>
+    </div>
+    <div class="axis">
+      <div class="poles"><span>思考</span><span>感情</span></div>
+      <div class="track">
+        <div class="rail"></div><div class="mid"></div>
+        <span class="val nk" style="left:25%">思考75</span>
+        <div class="dot nk" style="left:25%"></div>
+        <div class="dot tk" style="left:53%"></div>
+        <span class="val tk" style="left:53%">感情53</span>
+      </div>
+    </div>
+    <div class="axis">
+      <div class="poles"><span>計画</span><span>探索</span></div>
+      <div class="track">
+        <div class="rail"></div><div class="mid"></div>
+        <span class="val nk" style="left:47%">計画53</span>
+        <div class="dot nk" style="left:47%"></div>
+        <div class="dot tk" style="left:58%"></div>
+        <span class="val tk" style="left:58%">探索58</span>
+      </div>
+    </div>
+    <div class="axis" style="margin-bottom:2px;">
+      <div class="poles"><span>自己主張</span><span>激動</span></div>
+      <div class="track">
+        <div class="rail"></div><div class="mid"></div>
+        <span class="val nk" style="left:28%">自己主張72</span>
+        <div class="dot nk" style="left:28%"></div>
+        <div class="dot tk" style="left:75%"></div>
+        <span class="val tk" style="left:75%">激動75</span>
+      </div>
+    </div>
+    <p class="chart-note">くっきり度 = 4軸（内外向・直感・思考感情・計画探索）が50%からどれだけ離れているかの平均。0なら完全に中間、100なら全振り。</p>
+  </div>
+
+  <section>
+    <p class="sec-label">OVERVIEW</p>
+    <h2>総評 ── 定番の好相性。ただし教科書通りではない</h2>
+    <p>INTJ×ENFPはMBTI界隈で「黄金ペア」と呼ばれる定番の組み合わせ。共通の直感型が土台にあって、残りが全部補完関係になるのが理由とされる。ただ、この二人は%まで見ると教科書から2つズレている。</p>
+    <p>ひとつ目、たけうち君のくっきり度17はかなり低い。4軸すべて50付近＝「型の薄いENFP」で、確実に言えるのは外向<span class="num">67</span>と激動<span class="num">75</span>の2つだけ。残りは状況次第で振れる。しかも、たけうち君の測定は20問の簡易版なので、数値の精度自体もフル版（60問前後）より粗め。50近辺に集まっている軸──直感<span class="num">56</span>・感情<span class="num">53</span>・探索<span class="num">58</span>──は、フル版でやると反対側に振れる可能性すらある。逆に外向67と激動75は簡易版でもはっきり出た値なので、この2つは信頼していい。</p>
+    <p>ふたつ目、中田の直感<span class="num">96</span>は異常値レベルで、くっきり度41のほぼ全部を直感と思考が稼いでいる。つまりこの相性は「INTJ対ENFP」というより、<span style="font-weight:700;">「極端な直感型」対「バランス型で心が揺れやすい人」</span>として読むのが正確。以下はその前提での分析。</p>
+  </section>
+
+  <section>
+    <p class="sec-label">STRENGTHS</p>
+    <h2>噛み合う所</h2>
+    <ul class="plain">
+      <li><span class="li-t">直感×直感（96×56）が「気が合う」の正体。</span>抽象的な話、世界観、「こういうのやったら面白くね?」が通じる相手は貴重で、二人ともそっち側にいる。しかも96対56の差がむしろ機能する。中田が完全に概念の世界の住人なのに対し、たけうち君は現実に半分足が残っているので、構想を現実に降ろす橋渡しができる。</li>
+      <li><span class="li-t">内向57×外向67、どちらもマイルド。</span>「頻繁には会わないけど、会うと楽しい」という距離感は、この数値の組み合わせの理想形そのもの。たけうち君の外向は内向57の中田を消耗させるほど強くないし、中田の内向はたけうち君を寂しがらせるほど深くない。</li>
+      <li><span class="li-t">感情53はほぼ境界線。</span>INTJ×ENFPで一番こじれやすいのが思考対感情の軸だが、たけうち君のFは53しかないので、ロジックベースの議論に普通についてこられる。「感情論で話が進まない」ストレスはかなり少ないはず。</li>
+      <li><span class="li-t">役割の相性が創作向き。</span>INTJ＝構造・システム・長期設計、ENFP＝ノリ・勢い・キャラの声・笑いの感覚。コミカル軽ノリ路線のゲーム共作という方向性は、ENFPの得意分野のど真ん中に入っている。</li>
+    </ul>
+  </section>
+
+  <section>
+    <p class="sec-label">FRICTION — リスク順</p>
+    <h2>すれ違う所</h2>
+    <ol class="risk">
+      <li><span class="li-t">自己主張72 × 激動75。ここが最大の断層。</span>INTJ-Aの指摘は、本人の自覚以上に「強い」言い方になる（思考75＋自己主張72の合わせ技）。一方、激動75の側はそれを額面の2倍の重さで受け取り、Fがあるぶん不満をその場で言い返さずに溜める。ENFP-Tの型としての壊れ方は「ある日突然フェードアウト」で、この組み合わせがこじれるとしたら、ほぼ確実にこのルート。</li>
+      <li><span class="li-t">モチベーション曲線の形が違う。</span>INTJ-Aは一定ペースの長距離走、ENFP-Tは着火は早いが中だるみと自己不信の谷が来る型。長期の制作だと、中盤に一度は谷がくるのがむしろ標準。これは欠点ではなく仕様として最初から織り込んでおくのが正解。</li>
+      <li><span class="li-t">計画53 × 探索58。</span>両方マイルドなので日常は問題ないが、締切や仕様凍結の場面では「決めて閉じたい」対「選択肢を開けておきたい」が顔を出す。</li>
+      <li><span class="li-t">直感96の置いてけぼり。</span>中田が10手先の構想を一気に語ると、直感56のたけうち君は途中までしかついてこられない。内向型同士なら流せるが、外向型は会話から取り残されるのが結構こたえる。</li>
+    </ol>
+  </section>
+
+  <section>
+    <p class="sec-label">MANUAL</p>
+    <h2>おたがいの取扱説明書</h2>
+    <div class="manuals">
+      <div class="manual nk">
+        <h3>中田（INTJ-A）の取説</h3>
+        <p class="for">たけうち君が知っておくと楽なこと</p>
+        <ul>
+          <li>沈黙は不満じゃない。頭の中で組み立てているだけ。</li>
+          <li>指摘が強く聞こえたら、それは温度ではなく仕様。悪意の混入率はほぼゼロ。</li>
+          <li>10手先の構想を語り出したら「今どこの話?」と聞いていい。喜んで巻き戻す。</li>
+          <li>褒めが少ないのは不満だからじゃない。「何も言わない＝良い」のOSで動いている。</li>
+        </ul>
+      </div>
+      <div class="manual tk">
+        <h3>たけうち君（ENFP-T）の取説</h3>
+        <p class="for">中田が知っておくと楽なこと</p>
+        <ul>
+          <li>喋りながら考えるタイプ。生煮えの案をその場で論破しない。出す時間と絞る時間を分ける。</li>
+          <li>成果物には「ここが良い」を先にひとつ。指摘は判決ではなく選択肢として、一度に1〜2個まで。</li>
+          <li>中盤の失速は仕様。責めずに再合流しやすくしておけば、罪悪感→回避のスパイラル自体が起きない。</li>
+          <li>激動75は批判を長く引きずる。外からの酷評の一次受けは自己主張型が引き受けるくらいの分担でいい。</li>
+        </ul>
+      </div>
+    </div>
+    <div class="shared">
+      <h3>共同ルール</h3>
+      <ul class="plain">
+        <li><span class="li-t">お金と手柄の取り決めは、仲がいいうちに文書化する。</span>配分・クレジット・もし片方が抜けたらどうするかまで。この組み合わせが一番弱いのは金の揉め事。</li>
+        <li><span class="li-t">型で決めつけない。</span>特にくっきり度17＋簡易版測定の側は、ENFPステレオタイプが当たる確率は半分くらいしかない。型は初期値、更新は観察で。気が向いたらフル版で測り直すと精度が上がる。</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="close">
+    <p class="big">一言でいうと「設計者と着火剤」。</p>
+    <p>発想と能力の相性は文句なし。壊れるとしたら実力ではなくフィードバックの温度差からで、逆に言えばそこさえ守れば長持ちする組み合わせ。</p>
+  </div>
+
+  <p class="foot">数値は16Personalitiesの実測結果に基づく。中田はフル版、たけうち君は20問の簡易版での測定のため、たけうち君側の数値は誤差幅が広め。MBTIは統計的な傾向の整理であって診断ではないので、当たっている所だけ便利に使うのが正しい運用。／ 2026-07</p>
+
+</div></div>
+</body>
+</html>
